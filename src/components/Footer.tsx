@@ -31,13 +31,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#how-it-works" className="text-white/60 hover:text-white transition-colors">
+                <Link href="/how-it-works" className="text-white/60 hover:text-white transition-colors">
                   איך זה עובד
                 </Link>
               </li>
               <li>
-                <Link href="/#savings" className="text-white/60 hover:text-white transition-colors">
-                  חיסכון
+                <Link href="/blog" className="text-white/60 hover:text-white transition-colors">
+                  בלוג
                 </Link>
               </li>
               <li>
@@ -55,8 +55,23 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-bold text-gold mb-4">משפטי</h3>
+            <h3 className="font-bold text-gold mb-4">תמיכה ומידע</h3>
             <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/faq" className="text-white/60 hover:text-white transition-colors">
+                  שאלות נפוצות
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-white/60 hover:text-white transition-colors">
+                  צרו קשר
+                </Link>
+              </li>
+              <li>
+                <Link href="/security" className="text-white/60 hover:text-white transition-colors">
+                  אבטחה ופרטיות
+                </Link>
+              </li>
               <li>
                 <Link href="/terms" className="text-white/60 hover:text-white transition-colors">
                   תקנון השימוש
@@ -68,13 +83,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-white/60 hover:text-white transition-colors">
-                  אודות
-                </Link>
-              </li>
-              <li>
-                <Link href="/#faq" className="text-white/60 hover:text-white transition-colors">
-                  שאלות נפוצות
+                <Link href="/accessibility-statement" className="text-white/60 hover:text-white transition-colors">
+                  הצהרת נגישות
                 </Link>
               </li>
             </ul>

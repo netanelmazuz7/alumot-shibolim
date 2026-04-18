@@ -30,16 +30,10 @@ export default function Header() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-7">
             <Link
-              href="/#how-it-works"
+              href="/how-it-works"
               className="text-primary/70 hover:text-primary font-medium transition-colors"
             >
               איך זה עובד
-            </Link>
-            <Link
-              href="/#savings"
-              className="text-primary/70 hover:text-primary font-medium transition-colors"
-            >
-              חיסכון
             </Link>
             <Link
               href="/about"
@@ -48,16 +42,22 @@ export default function Header() {
               מי אנחנו
             </Link>
             <Link
-              href="/#community"
+              href="/blog"
               className="text-primary/70 hover:text-primary font-medium transition-colors"
             >
-              קהילה
+              בלוג
             </Link>
             <Link
-              href="/#faq"
+              href="/faq"
               className="text-primary/70 hover:text-primary font-medium transition-colors"
             >
               שאלות נפוצות
+            </Link>
+            <Link
+              href="/contact"
+              className="text-primary/70 hover:text-primary font-medium transition-colors"
+            >
+              צרו קשר
             </Link>
           </nav>
 
@@ -102,18 +102,11 @@ export default function Header() {
         <div className="md:hidden bg-white border-t border-wheat-dark/20 shadow-xl">
           <nav className="flex flex-col p-6 gap-4">
             <Link
-              href="/#how-it-works"
+              href="/how-it-works"
               onClick={() => setMobileOpen(false)}
               className="text-primary font-medium py-2"
             >
               איך זה עובד
-            </Link>
-            <Link
-              href="/#savings"
-              onClick={() => setMobileOpen(false)}
-              className="text-primary font-medium py-2"
-            >
-              חיסכון
             </Link>
             <Link
               href="/about"
@@ -123,18 +116,32 @@ export default function Header() {
               מי אנחנו
             </Link>
             <Link
-              href="/#community"
+              href="/blog"
               onClick={() => setMobileOpen(false)}
               className="text-primary font-medium py-2"
             >
-              קהילה
+              בלוג
             </Link>
             <Link
-              href="/#faq"
+              href="/faq"
               onClick={() => setMobileOpen(false)}
               className="text-primary font-medium py-2"
             >
               שאלות נפוצות
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="text-primary font-medium py-2"
+            >
+              צרו קשר
+            </Link>
+            <Link
+              href="/security"
+              onClick={() => setMobileOpen(false)}
+              className="text-primary font-medium py-2"
+            >
+              אבטחה
             </Link>
             <div className="flex flex-col gap-3 pt-4 border-t border-wheat-dark/20">
               <Link
