@@ -227,7 +227,7 @@ export default function Home() {
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 3
               </div>
-              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6">
                 <SavingTogetherAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">

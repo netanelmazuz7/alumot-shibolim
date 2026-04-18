@@ -182,51 +182,33 @@ html.a11y-big-cursor * {
 }
 .anim-stack-rise { animation: stack-rise 2.4s ease-out infinite; transform-origin: bottom center; }
 
-/* ====== Claim-process strip animations (clean, consistent 4s cycles) ====== */
+/* ====== Claim-process strip animations ====== */
 
-/* 1. Cars collide - smooth approach, small shake, reset */
-@keyframes car-approach-r {
-  0% { transform: translateX(60%); }
-  40%, 55% { transform: translateX(0); }
-  60% { transform: translateX(-2%); }
-  65% { transform: translateX(1%); }
-  70%, 100% { transform: translateX(0); opacity: 0; }
-  71% { opacity: 1; }
+/* 1. Cars collide - drive from opposite sides, meet in middle, bounce back */
+@keyframes car-from-left {
+  0% { transform: translate(-130px, 0); }
+  45%, 50% { transform: translate(0, 0); }
+  55% { transform: translate(-8px, 0); }
+  60% { transform: translate(-3px, 0); }
+  100% { transform: translate(-130px, 0); }
 }
-@keyframes car-approach-l {
-  0% { transform: translateX(-60%) scaleX(-1); }
-  40%, 55% { transform: translateX(0) scaleX(-1); }
-  60% { transform: translateX(2%) scaleX(-1); }
-  65% { transform: translateX(-1%) scaleX(-1); }
-  70%, 100% { transform: translateX(0) scaleX(-1); opacity: 0; }
-  71% { opacity: 1; }
+@keyframes car-from-right {
+  0% { transform: translate(130px, 0); }
+  45%, 50% { transform: translate(0, 0); }
+  55% { transform: translate(8px, 0); }
+  60% { transform: translate(3px, 0); }
+  100% { transform: translate(130px, 0); }
 }
-@keyframes car-loop-r {
-  0% { transform: translateX(60%); opacity: 1; }
-  40%, 55% { transform: translateX(0); opacity: 1; }
-  60% { transform: translateX(-2%); }
-  68% { transform: translateX(0); opacity: 1; }
-  75% { opacity: 0; }
-  100% { transform: translateX(60%); opacity: 0; }
-}
-@keyframes car-loop-l {
-  0% { transform: translateX(-60%) scaleX(-1); opacity: 1; }
-  40%, 55% { transform: translateX(0) scaleX(-1); opacity: 1; }
-  60% { transform: translateX(2%) scaleX(-1); }
-  68% { transform: translateX(0) scaleX(-1); opacity: 1; }
-  75% { opacity: 0; }
-  100% { transform: translateX(-60%) scaleX(-1); opacity: 0; }
-}
-.anim-car-r { animation: car-loop-r 4s ease-in-out infinite; }
-.anim-car-l { animation: car-loop-l 4s ease-in-out infinite; }
+.anim-car-from-left { animation: car-from-left 3.6s ease-in-out infinite; }
+.anim-car-from-right { animation: car-from-right 3.6s ease-in-out infinite; }
 
-@keyframes impact-spark {
-  0%, 55% { opacity: 0; transform: scale(0); }
-  60% { opacity: 1; transform: scale(1); }
-  72% { opacity: 0; transform: scale(1.5); }
-  100% { opacity: 0; transform: scale(1.5); }
+@keyframes impact-burst {
+  0%, 45% { opacity: 0; transform: scale(0); }
+  52% { opacity: 1; transform: scale(1); }
+  60% { opacity: 0.8; transform: scale(1.3); }
+  70%, 100% { opacity: 0; transform: scale(1.3); }
 }
-.anim-spark { animation: impact-spark 4s ease-out infinite; transform-origin: center; }
+.anim-impact { animation: impact-burst 3.6s ease-out infinite; transform-origin: center; transform-box: fill-box; }
 
 /* 2. AI scan - smooth sweep with fade in/out */
 @keyframes scan-sweep {
@@ -313,17 +295,15 @@ html.a11y-big-cursor * {
 }
 .anim-endpoint { animation: endpoint-glow 2.8s ease-in-out infinite; }
 
-/* 6. Transparency - rings expanding from center */
-@keyframes ring-expand {
-  0% { transform: scale(0.3); opacity: 0.9; }
-  100% { transform: scale(2); opacity: 0; }
+/* 6. Transparency - bars grow from bottom revealing data */
+@keyframes bar-grow {
+  0%, 10% { transform: scaleY(0); opacity: 0; }
+  20% { opacity: 1; }
+  60%, 85% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 1; }
 }
-.anim-ring-1 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 0s; transform-origin: center; transform-box: fill-box; }
-.anim-ring-2 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 0.8s; transform-origin: center; transform-box: fill-box; }
-.anim-ring-3 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 1.6s; transform-origin: center; transform-box: fill-box; }
-
-@keyframes eye-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.1); }
-}
-.anim-eye-blink { animation: eye-blink 4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.anim-bar-grow-1 { animation: bar-grow 3.2s ease-out infinite; animation-delay: 0s; transform-origin: bottom; transform-box: fill-box; }
+.anim-bar-grow-2 { animation: bar-grow 3.2s ease-out infinite; animation-delay: 0.25s; transform-origin: bottom; transform-box: fill-box; }
+.anim-bar-grow-3 { animation: bar-grow 3.2s ease-out infinite; animation-delay: 0.5s; transform-origin: bottom; transform-box: fill-box; }
+.anim-bar-grow-4 { animation: bar-grow 3.2s ease-out infinite; animation-delay: 0.75s; transform-origin: bottom; transform-box: fill-box; }
+.anim-bar-grow-5 { animation: bar-grow 3.2s ease-out infinite; animation-delay: 1s; transform-origin: bottom; transform-box: fill-box; }
