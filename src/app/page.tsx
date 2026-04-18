@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import FAQSection from "@/components/FAQSection";
+import JoinAnimation from "@/components/JoinAnimation";
 import {
   Shield,
   Users,
@@ -30,26 +31,26 @@ export default function Home() {
       <Header />
 
       {/* ============ HERO SECTION ============ */}
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <section className="relative flex items-center pt-20 overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-bl from-cream via-wheat-light to-wheat" />
         {/* Decorative circles */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Text side */}
             <div>
               <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-2 mb-6">
                 <Sparkles className="w-4 h-4 text-gold-dark" />
                 <span className="text-sm font-bold text-gold-dark">
-                  חדש בישראל — קהילת הגנה הדדית לרכב
+                  חדש בישראל - קהילת הגנה הדדית לרכב
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-black text-primary leading-tight mb-6">
-                הגנה הדדית לרכב —
+                הגנה הדדית לרכב -
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-l from-gold to-gold-dark">
                   חיסכון אמיתי
@@ -57,7 +58,7 @@ export default function Home() {
               </h1>
 
               <p className="text-xl text-primary/60 leading-relaxed mb-8 max-w-lg">
-                קהילה של נהגים אחראיים שמגנים על הרכבים שלהם יחד — ללא
+                קהילה של נהגים אחראיים שמגנים על הרכבים שלהם יחד - ללא
                 מתווכים. חסכו עד{" "}
                 <strong className="text-green font-black">84%</strong> מעלות
                 ההגנה המקיפה על הרכב.
@@ -76,15 +77,13 @@ export default function Home() {
                   * דמי חברות קבועים. העלות הממוצעת הכוללת (כולל השתתפות באירועים)
                   צפויה להיות כ-<strong className="text-primary">67₪ לחודש</strong>{" "}
                   בהנחת ממוצע של 2 אירועים בקהילה בחודש.
-                  <br />
-                  <span className="text-green font-bold">תקרה מובטחת: 150₪ לחודש מקסימום.</span>
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/join"
-                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-l from-gold via-gold-dark to-gold text-white rounded-2xl font-black text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all overflow-hidden"
+                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-l from-gold via-gold-dark to-gold text-white rounded-2xl font-black text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all overflow-hidden animate-cta-pulse"
                 >
                   <span className="absolute inset-0 bg-gradient-to-l from-green/0 via-white/20 to-green/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   <CheckCircle className="relative w-6 h-6" />
@@ -136,10 +135,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ DASHBOARD PREVIEW CTA ============ */}
+      <section className="py-12 bg-gradient-to-l from-wheat-light via-cream to-wheat-light">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-3xl shadow-xl border-2 border-gold/30 p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+            <div className="flex-1 text-center md:text-right">
+              <div className="inline-flex items-center gap-2 bg-green/10 border border-green/30 rounded-full px-3 py-1 mb-3">
+                <span className="w-2 h-2 rounded-full bg-green animate-ping" />
+                <span className="text-xs font-bold text-green">חדש</span>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black text-primary mb-2">
+                צפו באזור האישי - שקיפות מלאה
+              </h3>
+              <p className="text-primary/60 leading-relaxed">
+                ראו בדיוק איך נראה הדשבורד שלכם: רכב, תשלומים, אירועים, ציון חבר
+                - הכל בממשק אחד נקי ושקוף.
+              </p>
+            </div>
+            <Link
+              href="/dashboard"
+              className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-l from-primary via-primary-light to-primary text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-cta-pulse overflow-hidden whitespace-nowrap"
+            >
+              <span className="absolute inset-0 bg-gradient-to-l from-gold/0 via-gold/30 to-gold/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <Eye className="relative w-5 h-5" />
+              <span className="relative">לצפייה באזור האישי</span>
+              <ArrowLeft className="relative w-5 h-5 animate-arrow-bounce" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ============ HOW IT WORKS ============ */}
-      <section id="how-it-works" className="py-24 bg-cream">
+      <section id="how-it-works" className="py-16 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold-dark font-bold text-sm tracking-wider">
               פשוט ושקוף
             </span>
@@ -158,8 +187,8 @@ export default function Home() {
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 1
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center mb-6">
-                <UserCheck className="w-8 h-8 text-gold-dark" />
+              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6 text-gold-dark">
+                <JoinAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
                 מצטרפים לקהילה
@@ -182,7 +211,7 @@ export default function Home() {
                 מוגנים יחד
               </h3>
               <p className="text-primary/50 leading-relaxed">
-                הרכב שלכם מוגן בהגנה מקיפה מלאה. כשקורה אירוע לחבר קהילה —
+                הרכב שלכם מוגן בהגנה מקיפה מלאה. כשקורה אירוע לחבר קהילה -
                 כולם משתתפים בעלות בצורה יחסית והוגנת.
               </p>
             </div>
@@ -199,8 +228,8 @@ export default function Home() {
                 חוסכים אלפים
               </h3>
               <p className="text-primary/50 leading-relaxed">
-                ללא מתווכים ורווחי ענק — העלות האמיתית של הגנה מקיפה נמוכה
-                משמעותית. תקרה של 150₪ לחודש מגנה עליכם.
+                ללא מתווכים ורווחי ענק - העלות האמיתית של הגנה מקיפה נמוכה
+                משמעותית. שקיפות מלאה לגבי כל שקל בקהילה.
               </p>
             </div>
           </div>
@@ -208,14 +237,14 @@ export default function Home() {
       </section>
 
       {/* ============ SAVINGS COMPARISON ============ */}
-      <section id="savings" className="py-24 bg-white">
+      <section id="savings" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold-dark font-bold text-sm tracking-wider">
               ההבדל ברור
             </span>
             <h2 className="text-4xl font-black text-primary mt-2">
-              הסדר מסורתי מול אלומות שיבולים
+              הסדר מסורתי מול אלומת שיבולים
             </h2>
           </div>
 
@@ -262,18 +291,18 @@ export default function Home() {
                   <CheckCircle className="w-6 h-6 text-green" />
                 </div>
                 <h3 className="text-xl font-bold text-primary">
-                  אלומות שיבולים
+                  אלומת שיבולים
                 </h3>
               </div>
               <ul className="space-y-4">
                 {[
                   "30₪ דמי ניהול + ~37₪ השתתפות = 67₪/חודש",
-                  "אין מתווך — כסף עובר ישירות בין חברים",
+                  "אין מתווך - כסף עובר ישירות בין חברים",
                   "דיווח אירוע מטופל תוך 48 שעות",
-                  "ללא חוזה — עוזבים מתי שרוצים",
-                  "מחיר יציב — תלוי בקהילה בלבד",
-                  "תקרה חודשית 150₪ מגנה עליכם",
-                  "שקיפות מלאה — רואים כל שקל",
+                  "ללא חוזה - עוזבים מתי שרוצים",
+                  "מחיר יציב - תלוי בקהילה בלבד",
+                  "שקיפות פיננסית מלאה - רואים כל שקל",
+                  "קהילה מסוננת של נהגים אחראיים",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="w-5 h-5 rounded-full bg-green/20 flex items-center justify-center shrink-0 mt-0.5">
@@ -303,9 +332,9 @@ export default function Home() {
       </section>
 
       {/* ============ JOIN PROCESS PREVIEW ============ */}
-      <section id="process" className="py-24 bg-wheat-light">
+      <section id="process" className="py-16 bg-wheat-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold-dark font-bold text-sm tracking-wider">
               תהליך סינון קפדני
             </span>
@@ -313,7 +342,7 @@ export default function Home() {
               רק נהגים מובחרים מצטרפים
             </h2>
             <p className="text-primary/50 mt-3 max-w-2xl mx-auto">
-              הסינון הקפדני שלנו מבטיח קהילה איכותית — וזה מה שמאפשר מחירים כל
+              הסינון הקפדני שלנו מבטיח קהילה איכותית - וזה מה שמאפשר מחירים כל
               כך נמוכים לכולם
             </p>
           </div>
@@ -371,7 +400,7 @@ export default function Home() {
               <span className="text-primary/70">
                 תוצאת הבקשה תוך <strong className="text-primary">48 שעות</strong>{" "}
                 | ציון מינימום לקבלה:{" "}
-                <strong className="text-gold-dark">70 מתוך 100</strong>
+                <strong className="text-gold-dark">90 מתוך 100</strong>
               </span>
             </div>
           </div>
@@ -379,9 +408,9 @@ export default function Home() {
       </section>
 
       {/* ============ CLAIM PROCESS ============ */}
-      <section className="py-24 bg-cream">
+      <section className="py-16 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold-dark font-bold text-sm tracking-wider">
               פשוט ומהיר
             </span>
@@ -389,7 +418,7 @@ export default function Home() {
               תהליך דיווח שקוף
             </h2>
             <p className="text-primary/50 mt-3">
-              מהרגע שקרה אירוע ועד שהכסף בחשבון — הכל דיגיטלי, מהיר ושקוף
+              מהרגע שקרה אירוע ועד שהכסף בחשבון - הכל דיגיטלי, מהיר ושקוף
             </p>
           </div>
 
@@ -412,14 +441,14 @@ export default function Home() {
               {
                 icon: ClipboardCheck,
                 title: "אישור שמאי",
-                desc: "שמאי מורשה מאשר את הנזק. לנזקים גדולים — חוקר פרטי נוסף.",
+                desc: "שמאי מורשה מאשר את הנזק. לנזקים גדולים - חוקר פרטי נוסף.",
                 color: "bg-green/10",
                 iconColor: "text-green",
               },
               {
                 icon: Users,
                 title: "חלוקת עלות",
-                desc: "הסכום מתחלק בין כל חברי הקהילה — יחסית לשווי הרכב.",
+                desc: "הסכום מתחלק בין כל חברי הקהילה - יחסית לשווי הרכב.",
                 color: "bg-primary/10",
                 iconColor: "text-primary",
               },
@@ -458,9 +487,9 @@ export default function Home() {
       </section>
 
       {/* ============ COMMUNITY & TRANSPARENCY ============ */}
-      <section id="community" className="py-24 bg-primary">
+      <section id="community" className="py-16 bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold font-bold text-sm tracking-wider">
               שקיפות מלאה
             </span>
@@ -499,7 +528,7 @@ export default function Home() {
                 קהילה אמיתית
               </h3>
               <p className="text-white/50 leading-relaxed">
-                אנחנו לא מתווך — אנחנו קהילה של אנשים שמגנים אחד על
+                אנחנו לא מתווך - אנחנו קהילה של אנשים שמגנים אחד על
                 השני. כשכולם אחראיים, כולם מרוויחים.
               </p>
             </div>
@@ -508,9 +537,9 @@ export default function Home() {
       </section>
 
       {/* ============ TESTIMONIALS ============ */}
-      <section className="py-24 bg-wheat-light">
+      <section className="py-16 bg-wheat-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="text-gold-dark font-bold text-sm tracking-wider">
               מה אומרים עלינו
             </span>
@@ -525,7 +554,7 @@ export default function Home() {
                 name: "יוסי כהן",
                 location: "תל אביב",
                 car: "טויוטה קורולה 2022",
-                text: "שילמתי 450₪ לחודש על כיסוי מקיף מסורתי. עכשיו עם אלומות שיבולים אני משלם ממוצע של 65₪. החיסכון הוא אדיר.",
+                text: "שילמתי 450₪ לחודש על כיסוי מקיף מסורתי. עכשיו עם אלומת שיבולים אני משלם ממוצע של 65₪. החיסכון הוא אדיר.",
                 saving: "₪4,620",
               },
               {
@@ -577,14 +606,14 @@ export default function Home() {
       <FAQSection />
 
       {/* ============ FINAL CTA ============ */}
-      <section className="py-24 bg-gradient-to-bl from-gold/20 via-wheat to-cream">
+      <section className="py-16 bg-gradient-to-bl from-gold/20 via-wheat to-cream">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-black text-primary mb-6">
             מוכנים לחסוך אלפי שקלים?
           </h2>
           <p className="text-xl text-primary/50 mb-10 max-w-xl mx-auto">
-            הצטרפו לקהילת אלומות שיבולים והתחילו לשלם את המחיר האמיתי של הגנה
-            מקיפה — בלי שמתווך ייקח לכם 60% מהכסף.
+            הצטרפו לקהילת אלומת שיבולים והתחילו לשלם את המחיר האמיתי של הגנה
+            מקיפה - בלי שמתווך ייקח לכם 60% מהכסף.
           </p>
           <Link
             href="/join"

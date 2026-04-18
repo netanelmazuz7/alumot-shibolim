@@ -13,7 +13,7 @@ export default function Footer() {
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center shadow-md">
                 <WheatLogo className="text-white" size={30} />
               </div>
-              <span className="text-lg font-bold">אלומות שיבולים</span>
+              <span className="text-lg font-bold">אלומת שיבולים</span>
             </div>
             <p className="text-white/60 text-sm leading-relaxed">
               קהילת הגנה הדדית לרכבים בישראל. יחד אנחנו חוסכים אלפי שקלים בשנה
@@ -101,9 +101,9 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-white/40 text-sm">
-          <p>© {new Date().getFullYear()} אלומות שיבולים. כל הזכויות שמורות.</p>
+          <p>© {new Date().getFullYear()} אלומת שיבולים. כל הזכויות שמורות.</p>
           <p className="mt-1">
-            פלטפורמת עזרה הדדית — אינה חברת ביטוח | פועלת בהתאם לחוק הגנת הפרטיות
+            פלטפורמת עזרה הדדית - אינה חברת ביטוח | פועלת בהתאם לחוק הגנת הפרטיות
           </p>
         </div>
       </div>

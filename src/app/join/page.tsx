@@ -129,20 +129,20 @@ function calculateScore(form: FormData): ScoreResult {
   // Auto-disqualifiers (cannot pass under any condition)
   if (form.hasCriminalRecord === "yes") {
     disqualified = true;
-    reasons.push("עבר פלילי פעיל — פסילה אוטומטית");
+    reasons.push("עבר פלילי פעיל - פסילה אוטומטית");
   }
 
   if (form.claimsCount === "3 ומעלה") {
     disqualified = true;
-    reasons.push("3 אירועים ומעלה ב-3 שנים אחרונות — פסילה אוטומטית");
+    reasons.push("3 אירועים ומעלה ב-3 שנים אחרונות - פסילה אוטומטית");
   }
 
   if (form.trafficViolations === "3 ומעלה") {
     disqualified = true;
-    reasons.push("3 עבירות תנועה ומעלה בשנה האחרונה — פסילה אוטומטית");
+    reasons.push("3 עבירות תנועה ומעלה בשנה האחרונה - פסילה אוטומטית");
   }
 
-  // Birth date check — under 25
+  // Birth date check - under 25
   if (form.birthDate) {
     const age = Math.floor(
       (Date.now() - new Date(form.birthDate).getTime()) /
@@ -150,7 +150,7 @@ function calculateScore(form: FormData): ScoreResult {
     );
     if (age < 25) {
       disqualified = true;
-      reasons.push(`גיל ${age} — מינימום לחברות הוא 25`);
+      reasons.push(`גיל ${age} - מינימום לחברות הוא 25`);
     }
   }
 
@@ -195,11 +195,11 @@ function calculateScore(form: FormData): ScoreResult {
   else if (form.incomeRange === "10,000-15,000 ₪") score += 5;
   else if (form.incomeRange === "5,000-10,000 ₪") score += 3;
 
-  // Residence risk — high-theft cities lose points (up to -15)
+  // Residence risk - high-theft cities lose points (up to -15)
   if (form.city && highRiskCities.includes(form.city.trim())) {
     score -= 15;
     reasons.push(
-      "עיר מגורים ברמת סיכון גבוהה לגניבות רכב — הציון הופחת ב-15 נק'"
+      "עיר מגורים ברמת סיכון גבוהה לגניבות רכב - הציון הופחת ב-15 נק'"
     );
   } else if (form.city) {
     score += 10;
@@ -224,7 +224,7 @@ export default function JoinPage() {
   const set = (field: keyof FormData, value: FormData[keyof FormData]) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
-  // Step-level validation — returns list of missing field labels
+  // Step-level validation - returns list of missing field labels
   const getStepErrors = (s: number): string[] => {
     const errs: string[] = [];
     if (s === 0) {
@@ -286,7 +286,7 @@ export default function JoinPage() {
   );
   const canSubmit = totalMissingCount === 0;
 
-  // Free navigation — no blocking between steps
+  // Free navigation - no blocking between steps
   const next = () => {
     setStep((s) => Math.min(s + 1, 4));
   };
@@ -341,7 +341,7 @@ export default function JoinPage() {
                 לצערנו, אינכם עומדים בתנאי סף
               </h1>
               <p className="text-primary/60 leading-relaxed mb-5">
-                הקריטריונים שלנו נועדו לשמור על קהילה בטוחה ואיכותית — וחלק מהם
+                הקריטריונים שלנו נועדו לשמור על קהילה בטוחה ואיכותית - וחלק מהם
                 הם תנאי סף שאינם גמישים.
               </p>
               <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-5 mb-6 text-right">
@@ -419,7 +419,7 @@ export default function JoinPage() {
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center shadow-md">
               <WheatLogo className="text-white" size={28} />
             </div>
-            <span className="font-bold text-primary">אלומות שיבולים</span>
+            <span className="font-bold text-primary">אלומת שיבולים</span>
           </Link>
           <div className="flex items-center gap-2 text-sm text-primary/40">
             <Lock className="w-4 h-4" />
@@ -593,7 +593,7 @@ export default function JoinPage() {
                         : "bg-white text-primary/60 border-wheat-dark/30 hover:border-green/40"
                     }`}
                   >
-                    לא — אין לי עבר פלילי
+                    לא - אין לי עבר פלילי
                   </button>
                   <button
                     type="button"
@@ -611,7 +611,7 @@ export default function JoinPage() {
                   <div className="mt-3 flex items-start gap-2 bg-red-50 rounded-xl p-3 border border-red-200">
                     <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
                     <p className="text-sm text-danger">
-                      עבר פלילי פעיל הוא תנאי סף — לצערנו לא ניתן להתקבל לקהילה
+                      עבר פלילי פעיל הוא תנאי סף - לצערנו לא ניתן להתקבל לקהילה
                       עם עבר פלילי.
                     </p>
                   </div>
@@ -710,7 +710,7 @@ export default function JoinPage() {
                 פרטי הרכב
               </h2>
               <p className="text-primary/40 mb-8">
-                הזינו את מספר הרישוי — נשלוף את פרטי הרכב אוטומטית. העלו 4
+                הזינו את מספר הרישוי - נשלוף את פרטי הרכב אוטומטית. העלו 4
                 תמונות של הרכב מכל הצדדים.
               </p>
 
@@ -724,7 +724,7 @@ export default function JoinPage() {
                     placeholder="12345678"
                     numeric
                     maxLength={8}
-                    hint="עד 8 ספרות — שליפת פרטי הרכב אוטומטית מרשות הרישוי"
+                    hint="עד 8 ספרות - שליפת פרטי הרכב אוטומטית מרשות הרישוי"
                   />
                 </div>
                 <CarSelect
@@ -773,7 +773,7 @@ export default function JoinPage() {
                   <span className="text-danger">*</span>
                 </label>
                 <p className="text-xs text-primary/40 mb-4">
-                  קדמי, אחורי, ימין ושמאל — ה-AI שלנו מנתח אוטומטית נזקים
+                  קדמי, אחורי, ימין ושמאל - ה-AI שלנו מנתח אוטומטית נזקים
                   קיימים
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -847,7 +847,7 @@ export default function JoinPage() {
                   value={form.claimsCount}
                   onChange={(v) => set("claimsCount", v)}
                   options={["", "0", "1", "2", "3 ומעלה"]}
-                  labels={["בחרו", "0 — ללא אירועים", "1", "2", "3 ומעלה"]}
+                  labels={["בחרו", "0 - ללא אירועים", "1", "2", "3 ומעלה"]}
                 />
                 <SelectField
                   label="עבירות תנועה בשנה האחרונה"
@@ -855,7 +855,7 @@ export default function JoinPage() {
                   value={form.trafficViolations}
                   onChange={(v) => set("trafficViolations", v)}
                   options={["", "0", "1", "2", "3 ומעלה"]}
-                  labels={["בחרו", "0 — ללא עבירות", "1", "2", "3 ומעלה"]}
+                  labels={["בחרו", "0 - ללא עבירות", "1", "2", "3 ומעלה"]}
                 />
               </div>
 
@@ -864,52 +864,12 @@ export default function JoinPage() {
                   <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
                   <p className="text-sm text-danger">
                     שימו לב: 3 אירועים ומעלה ב-3 שנים אחרונות עלולים להוביל
-                    לדחיית הבקשה. אנחנו מעודדים אתכם להגיש בכל מקרה — כל בקשה
+                    לדחיית הבקשה. אנחנו מעודדים אתכם להגיש בכל מקרה - כל בקשה
                     נבדקת באופן אישי.
                   </p>
                 </div>
               )}
 
-              {/* Scoring info */}
-              <div className="mt-8 bg-wheat-light rounded-2xl p-6">
-                <h3 className="font-bold text-primary mb-4">
-                  איך מחשבים את הניקוד שלכם (0-100)
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  {[
-                    { label: "0 אירועים ב-3 שנים", points: "+30", good: true },
-                    { label: "0 עבירות תנועה בשנה", points: "+15", good: true },
-                    { label: "גיל 30-55", points: "+15", good: true },
-                    { label: "ניסיון מעל 15 שנים", points: "+15", good: true },
-                    { label: "הכנסה מעל 25,000 ₪", points: "+10", good: true },
-                    { label: "מצב משפחתי: נשוי/אה", points: "+5", good: true },
-                    { label: "עיר בסיכון נמוך", points: "+10", good: true },
-                    { label: "עיר סיכון גבוה לגניבות", points: "-15", good: false },
-                  ].map((item) => (
-                    <div
-                      key={item.label}
-                      className="flex justify-between bg-white rounded-lg px-4 py-2"
-                    >
-                      <span className="text-primary/50">{item.label}</span>
-                      <span className={`font-bold ${item.good ? "text-green" : "text-danger"}`}>
-                        {item.points}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 p-4 bg-white rounded-xl border border-gold/30">
-                  <p className="text-sm font-bold text-primary mb-2">תנאי סף (פסילה אוטומטית)</p>
-                  <ul className="text-xs text-primary/60 space-y-1">
-                    <li>• עבר פלילי פעיל</li>
-                    <li>• 3 אירועים ומעלה ב-3 שנים האחרונות</li>
-                    <li>• 3 עבירות תנועה ומעלה בשנה האחרונה</li>
-                    <li>• גיל מתחת ל-25</li>
-                  </ul>
-                </div>
-                <p className="text-sm font-bold text-gold-dark mt-4 text-center">
-                  ציון מינימום לקבלה: 90 מתוך 100
-                </p>
-              </div>
             </div>
           )}
 
@@ -950,7 +910,7 @@ export default function JoinPage() {
                   checked={form.consentVehicle}
                   onChange={(v) => set("consentVehicle", v)}
                   title="בדיקת נתוני רכב"
-                  desc="רשות הרישוי — שווי שוק, עבר תאונות"
+                  desc="רשות הרישוי - שווי שוק, עבר תאונות"
                   required
                 />
                 <ConsentCheckbox
@@ -985,7 +945,7 @@ export default function JoinPage() {
                     <Link href="/privacy" className="text-gold-dark font-bold underline">
                       מדיניות הפרטיות
                     </Link>{" "}
-                    של אלומות שיבולים.
+                    של אלומת שיבולים.
                   </span>
                 </label>
               </div>
@@ -1005,7 +965,7 @@ export default function JoinPage() {
             </div>
           )}
 
-          {/* Validation errors display — ONLY shown after trying to submit */}
+          {/* Validation errors display - ONLY shown after trying to submit */}
           {showValidation && totalMissingCount > 0 && (
             <div className="mt-8 bg-red-50 border-2 border-red-300 rounded-2xl p-6">
               <div className="flex items-start gap-3 mb-4">
@@ -1091,7 +1051,7 @@ export default function JoinPage() {
           {/* Subtle hint on last step if fields still missing */}
           {step === 4 && !canSubmit && !showValidation && (
             <p className="mt-3 text-center text-sm text-primary/50">
-              💡 טיפ: השדות עם * הם חובה. אם משהו חסר — לחיצה על &ldquo;שלחו&rdquo; תציג לך את הרשימה.
+              💡 טיפ: השדות עם * הם חובה. אם משהו חסר - לחיצה על &ldquo;שלחו&rdquo; תציג לך את הרשימה.
             </p>
           )}
         </div>

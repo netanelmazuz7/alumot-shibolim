@@ -13,7 +13,7 @@ export default function SavingsCalculator() {
   return (
     <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border border-wheat-dark/20">
       <h3 className="text-2xl font-bold text-primary mb-2 text-center">
-        כמה תחסכו עם אלומות שיבולים?
+        כמה תחסכו עם אלומת שיבולים?
       </h3>
       <p className="text-primary/50 text-center mb-8">
         הזיזו את הסליידר לעלות החודשית הנוכחית של ההגנה על הרכב
@@ -59,7 +59,7 @@ export default function SavingsCalculator() {
 
         {/* Alumot */}
         <div className="bg-green/5 rounded-2xl p-5 text-center border-2 border-green/30">
-          <p className="text-sm text-primary/50 mb-1">אלומות שיבולים</p>
+          <p className="text-sm text-primary/50 mb-1">אלומת שיבולים</p>
           <p className="text-3xl font-bold text-green">₪{alumotMonthly}</p>
           <p className="text-xs text-primary/40">לחודש בממוצע</p>
         </div>
@@ -79,7 +79,7 @@ export default function SavingsCalculator() {
       </div>
 
       <p className="text-center text-xs text-primary/30 mt-4">
-        * ממוצע עלות חודשית באלומות שיבולים: 30₪ דמי ניהול + ~37₪ השתתפות באירועים
+        * ממוצע עלות חודשית באלומת שיבולים: 30₪ דמי ניהול + ~37₪ השתתפות באירועים
       </p>
     </div>
   );

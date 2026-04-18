@@ -17,9 +17,13 @@ import {
   Clock,
   AlertCircle,
   ChevronLeft,
+  ChevronRight,
   Eye,
   Banknote,
   Users,
+  Menu,
+  X,
+  Home as HomeIcon,
 } from "lucide-react";
 import WheatLogo from "@/components/WheatLogo";
 
@@ -41,11 +45,11 @@ const memberData = {
 };
 
 const payments = [
-  { date: "14/04/2026", desc: "דמי ניהול — אפריל", amount: 30, type: "fee" },
-  { date: "10/04/2026", desc: "השתתפות — אירוע #127", amount: 18.5, type: "claim" },
-  { date: "14/03/2026", desc: "דמי ניהול — מרץ", amount: 30, type: "fee" },
-  { date: "22/03/2026", desc: "השתתפות — אירוע #119", amount: 42, type: "claim" },
-  { date: "14/02/2026", desc: "דמי ניהול — פברואר", amount: 30, type: "fee" },
+  { date: "14/04/2026", desc: "דמי ניהול - אפריל", amount: 30, type: "fee" },
+  { date: "10/04/2026", desc: "השתתפות - אירוע #127", amount: 18.5, type: "claim" },
+  { date: "14/03/2026", desc: "דמי ניהול - מרץ", amount: 30, type: "fee" },
+  { date: "22/03/2026", desc: "השתתפות - אירוע #119", amount: 42, type: "claim" },
+  { date: "14/02/2026", desc: "דמי ניהול - פברואר", amount: 30, type: "fee" },
 ];
 
 const claims = [
@@ -63,83 +67,206 @@ const tabs = [
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const sidebarWidth = sidebarOpen ? "w-64" : "w-20";
 
   return (
     <div className="min-h-screen bg-cream">
       {/* Sidebar + Content */}
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="hidden md:flex flex-col w-64 bg-primary min-h-screen fixed right-0 top-0 z-40">
-          <div className="p-6 border-b border-white/10">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center shadow-md">
+        {/* Desktop collapsible sidebar */}
+        <aside
+          className={`hidden md:flex flex-col ${sidebarWidth} bg-primary min-h-screen fixed right-0 top-0 z-40 transition-all duration-300 shadow-xl`}
+        >
+          {/* Top: home logo + toggle */}
+          <div className="p-4 border-b border-white/10 flex items-center justify-between gap-2">
+            <Link
+              href="/"
+              className="flex items-center gap-3 group"
+              aria-label="חזרה לדף הבית"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                 <WheatLogo className="text-white" size={28} />
               </div>
-              <span className="text-white font-bold">אלומות שיבולים</span>
+              {sidebarOpen && (
+                <span className="text-white font-bold text-sm whitespace-nowrap">
+                  אלומת שיבולים
+                </span>
+              )}
             </Link>
+            <button
+              type="button"
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-label={sidebarOpen ? "כווץ תפריט" : "הרחב תפריט"}
+              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0"
+            >
+              {sidebarOpen ? (
+                <ChevronRight className="w-4 h-4" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
+            </button>
           </div>
 
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-3 space-y-1">
+            <Link
+              href="/"
+              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-colors ${
+                !sidebarOpen ? "justify-center" : ""
+              }`}
+              title="דף הבית"
+            >
+              <HomeIcon className="w-5 h-5 shrink-0" />
+              {sidebarOpen && <span className="font-medium">דף הבית</span>}
+            </Link>
+
+            <div className="h-px bg-white/10 my-2" />
+
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-right transition-colors ${
+                title={tab.label}
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-right transition-colors ${
+                  !sidebarOpen ? "justify-center" : ""
+                } ${
                   activeTab === tab.id
                     ? "bg-white/10 text-gold"
                     : "text-white/50 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <tab.icon className="w-5 h-5" />
-                <span className="font-medium">{tab.label}</span>
+                <tab.icon className="w-5 h-5 shrink-0" />
+                {sidebarOpen && <span className="font-medium">{tab.label}</span>}
               </button>
             ))}
 
             <Link
               href="/claims/new"
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gold/20 text-gold hover:bg-gold/30 transition-colors mt-4"
+              title="דיווח אירוע"
+              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gold/20 text-gold hover:bg-gold/30 transition-colors mt-4 ${
+                !sidebarOpen ? "justify-center" : ""
+              }`}
             >
-              <Plus className="w-5 h-5" />
-              <span className="font-bold">דיווח אירוע</span>
+              <Plus className="w-5 h-5 shrink-0" />
+              {sidebarOpen && <span className="font-bold">דיווח אירוע</span>}
             </Link>
           </nav>
 
-          <div className="p-4 border-t border-white/10">
-            <div className="flex items-center gap-3 px-4 py-2">
-              <div className="w-8 h-8 rounded-full bg-gold/30 flex items-center justify-center">
+          <div className="p-3 border-t border-white/10">
+            <div
+              className={`flex items-center gap-3 px-2 py-2 ${
+                !sidebarOpen ? "justify-center" : ""
+              }`}
+            >
+              <div className="w-9 h-9 rounded-full bg-gold/30 flex items-center justify-center shrink-0">
                 <User className="w-4 h-4 text-gold" />
               </div>
-              <div>
-                <p className="text-white text-sm font-medium">{memberData.name}</p>
-                <p className="text-white/30 text-xs">חבר מ{memberData.memberSince}</p>
-              </div>
+              {sidebarOpen && (
+                <div className="min-w-0">
+                  <p className="text-white text-sm font-medium truncate">
+                    {memberData.name}
+                  </p>
+                  <p className="text-white/30 text-xs truncate">
+                    חבר מ{memberData.memberSince}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </aside>
 
-        {/* Mobile header */}
+        {/* Mobile top bar */}
         <div className="md:hidden fixed top-0 right-0 left-0 bg-primary z-40 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2" aria-label="דף הבית">
             <WheatLogo className="text-gold" size={26} />
-            <span className="text-white font-bold text-sm">אלומות שיבולים</span>
-          </div>
-          <div className="flex items-center gap-2">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`p-2 rounded-lg ${
-                  activeTab === tab.id ? "bg-white/10 text-gold" : "text-white/40"
-                }`}
-              >
-                <tab.icon className="w-5 h-5" />
-              </button>
-            ))}
-          </div>
+            <span className="text-white font-bold text-sm">אלומת שיבולים</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen((v) => !v)}
+            aria-label="תפריט"
+            className="p-2 rounded-lg bg-white/10 text-white"
+          >
+            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
 
+        {/* Mobile drawer */}
+        {sidebarOpen && (
+          <div
+            className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <aside
+              dir="rtl"
+              className="absolute right-0 top-0 bottom-0 w-72 bg-primary shadow-2xl p-5 overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <Link
+                  href="/"
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center gap-2"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center">
+                    <WheatLogo className="text-white" size={24} />
+                  </div>
+                  <span className="text-white font-bold text-sm">אלומת שיבולים</span>
+                </Link>
+                <button
+                  type="button"
+                  aria-label="סגור"
+                  onClick={() => setSidebarOpen(false)}
+                  className="p-2 rounded-lg bg-white/10 text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <Link
+                href="/"
+                onClick={() => setSidebarOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white/60 hover:bg-white/5"
+              >
+                <HomeIcon className="w-5 h-5" />
+                <span>דף הבית</span>
+              </Link>
+              <div className="h-px bg-white/10 my-2" />
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setSidebarOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-right ${
+                    activeTab === tab.id
+                      ? "bg-white/10 text-gold"
+                      : "text-white/60 hover:bg-white/5"
+                  }`}
+                >
+                  <tab.icon className="w-5 h-5" />
+                  <span className="font-medium">{tab.label}</span>
+                </button>
+              ))}
+              <Link
+                href="/claims/new"
+                onClick={() => setSidebarOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gold/20 text-gold mt-4"
+              >
+                <Plus className="w-5 h-5" />
+                <span className="font-bold">דיווח אירוע</span>
+              </Link>
+            </aside>
+          </div>
+        )}
+
         {/* Main Content */}
-        <main className="flex-1 md:mr-64 pt-16 md:pt-0">
+        <main
+          className={`flex-1 pt-16 md:pt-0 transition-all duration-300 ${
+            sidebarOpen ? "md:mr-64" : "md:mr-20"
+          }`}
+        >
           <div className="p-6 md:p-10">
             {/* Overview */}
             {activeTab === "overview" && (
@@ -148,7 +275,7 @@ export default function DashboardPage() {
                   שלום, {memberData.name}!
                 </h1>
                 <p className="text-primary/40 mb-8">
-                  הנה סיכום החשבון שלכם באלומות שיבולים
+                  הנה סיכום החשבון שלכם באלומת שיבולים
                 </p>
 
                 {/* Stats Grid */}
@@ -252,7 +379,7 @@ export default function DashboardPage() {
               <div>
                 <h1 className="text-3xl font-black text-primary mb-2">תשלומים</h1>
                 <p className="text-primary/40 mb-8">
-                  היסטוריית התשלומים שלכם — דמי ניהול + השתתפות באירועים
+                  היסטוריית התשלומים שלכם - דמי ניהול + השתתפות באירועים
                 </p>
 
                 <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6 mb-6">

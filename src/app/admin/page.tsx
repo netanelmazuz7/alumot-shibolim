@@ -56,7 +56,7 @@ export default function AdminPage() {
                 <WheatLogo className="text-white" size={28} />
               </div>
               <div>
-                <span className="text-white font-bold block text-sm">אלומות שיבולים</span>
+                <span className="text-white font-bold block text-sm">אלומת שיבולים</span>
                 <span className="text-gold text-xs">פאנל ניהול</span>
               </div>
             </Link>
@@ -171,7 +171,7 @@ export default function AdminPage() {
                       <div key={c.id} className="flex items-center justify-between py-3 border-b border-wheat-dark/10 last:border-0">
                         <div>
                           <p className="font-medium text-primary text-sm">
-                            {c.id} — {c.desc}
+                            {c.id} - {c.desc}
                           </p>
                           <p className="text-xs text-primary/30">{c.member} | {c.date}</p>
                         </div>
@@ -298,7 +298,7 @@ export default function AdminPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6">
-                    <p className="text-xs text-primary/30 mb-1">הכנסות חודשיות — דמי ניהול</p>
+                    <p className="text-xs text-primary/30 mb-1">הכנסות חודשיות - דמי ניהול</p>
                     <p className="text-3xl font-black text-primary">₪72,540</p>
                     <p className="text-xs text-green mt-1">2,418 חברים × ₪30</p>
                   </div>
@@ -315,7 +315,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6">
-                  <h2 className="font-bold text-primary mb-4">סיכום חודשי — אפריל 2026</h2>
+                  <h2 className="font-bold text-primary mb-4">סיכום חודשי - אפריל 2026</h2>
                   <div className="space-y-3">
                     {[
                       { label: "הכנסה מדמי ניהול", value: "₪72,540", color: "text-green" },

@@ -41,7 +41,7 @@ export default function VerifiedInput({
   const handleSend = async () => {
     setError(null);
     setSending(true);
-    // Simulate sending — in production, call backend API
+    // Simulate sending - in production, call backend API
     await new Promise((r) => setTimeout(r, 900));
     // Generate 6-digit code (for demo, always use 123456)
     const code = "123456";
@@ -59,7 +59,7 @@ export default function VerifiedInput({
       setOtpOpen(false);
       setOtp("");
     } else {
-      setError("קוד שגוי — נסה שוב");
+      setError("קוד שגוי - נסה שוב");
     }
     setVerifying(false);
   };

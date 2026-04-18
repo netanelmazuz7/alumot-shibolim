@@ -50,7 +50,7 @@ export default function CommunityPage() {
             שקיפות מלאה
           </span>
           <h1 className="text-4xl md:text-5xl font-black text-primary mt-2 mb-4">
-            הקהילה שלנו — מספרים בזמן אמת
+            הקהילה שלנו - מספרים בזמן אמת
           </h1>
           <p className="text-xl text-primary/50 max-w-2xl mx-auto">
             אצלנו אין מה להסתיר. כל שקל מתועד, כל אירוע שקוף, כל חבר רואה
@@ -92,7 +92,7 @@ export default function CommunityPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-black text-primary">
-              סיכום חודשי — אירועים ותשלומים
+              סיכום חודשי - אירועים ותשלומים
             </h2>
             <p className="text-primary/40 mt-2">כל המספרים לעיון הקהילה</p>
           </div>
@@ -129,7 +129,7 @@ export default function CommunityPage() {
             <div className="px-6 py-4 bg-wheat-light border-b border-wheat-dark/10">
               <h3 className="font-bold text-primary flex items-center gap-2">
                 <Activity className="w-5 h-5 text-gold-dark" />
-                אירועים אחרונים — שקיפות מלאה
+                אירועים אחרונים - שקיפות מלאה
               </h3>
             </div>
             <table className="w-full">
@@ -195,7 +195,7 @@ export default function CommunityPage() {
               <Eye className="w-12 h-12 text-gold-dark mx-auto mb-4" />
               <h3 className="text-xl font-bold text-primary mb-3">שקיפות 100%</h3>
               <p className="text-primary/50 leading-relaxed">
-                כל שקל שנכנס וכל שקל שיצא — גלוי לכל חבר בקהילה. אין הפתעות,
+                כל שקל שנכנס וכל שקל שיצא - גלוי לכל חבר בקהילה. אין הפתעות,
                 אין עלויות נסתרות.
               </p>
             </div>
@@ -204,7 +204,7 @@ export default function CommunityPage() {
               <h3 className="text-xl font-bold text-primary mb-3">אין קופה מרכזית</h3>
               <p className="text-primary/50 leading-relaxed">
                 כסף לא יושב בצד. כשקורה אירוע, כל חבר משלם את חלקו היחסי
-                ישירות — ללא מתווכים.
+                ישירות - ללא מתווכים.
               </p>
             </div>
             <div className="bg-white rounded-3xl p-8 shadow-md border border-wheat-dark/10 text-center">

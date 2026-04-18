@@ -12,10 +12,10 @@ export default function StrengthInUnity() {
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-primary mb-4">
-            שיבול אחד — נשבר. אלומה — עומדת.
+            שיבול אחד - נשבר. אלומה - עומדת.
           </h2>
           <p className="text-xl text-primary/60 max-w-2xl mx-auto">
-            המשל של אבי השבטים על יחידות קהילתית — כל אחד מאיתנו לבד, שביר. יחד,
+            המשל של אבי השבטים על יחידות קהילתית - כל אחד מאיתנו לבד, שביר. יחד,
             אנחנו בלתי ניתנים לשבירה.
           </p>
         </div>
@@ -59,7 +59,7 @@ export default function StrengthInUnity() {
               </radialGradient>
             </defs>
 
-            {/* ============ LEFT PANEL — single broken stalk ============ */}
+            {/* ============ LEFT PANEL - single broken stalk ============ */}
             <g>
               {/* Panel background */}
               <rect
@@ -83,10 +83,10 @@ export default function StrengthInUnity() {
                 fill="#b91c1c"
                 fontFamily="system-ui, sans-serif"
               >
-                שיבול אחד — נשבר בקלות
+                שיבול אחד - נשבר בקלות
               </text>
 
-              {/* Top broken piece of stalk — angled */}
+              {/* Top broken piece of stalk - angled */}
               <g transform="translate(225, 200) rotate(-35)">
                 {/* Grain head */}
                 <ellipse cx="0" cy="-70" rx="14" ry="28" fill="url(#wheatGrad)" />
@@ -196,11 +196,11 @@ export default function StrengthInUnity() {
                 fill="#991b1b"
                 fontFamily="system-ui, sans-serif"
               >
-                לבד — שביר ללא הגנה
+                לבד - שביר ללא הגנה
               </text>
             </g>
 
-            {/* ============ RIGHT PANEL — bundle, can't break ============ */}
+            {/* ============ RIGHT PANEL - bundle, can't break ============ */}
             <g>
               {/* Panel background */}
               <rect
@@ -224,7 +224,7 @@ export default function StrengthInUnity() {
                 fill="#15803d"
                 fontFamily="system-ui, sans-serif"
               >
-                אלומה — לא נשברת!
+                אלומה - לא נשברת!
               </text>
 
               {/* Bundle of 5 stalks */}
@@ -248,7 +248,7 @@ export default function StrengthInUnity() {
                   </g>
                 ))}
 
-                {/* Binding rope — double wrap */}
+                {/* Binding rope - double wrap */}
                 <ellipse cx="0" cy="10" rx="75" ry="13" fill="none" stroke="url(#ropeGrad)" strokeWidth="8" />
                 <ellipse cx="0" cy="25" rx="75" ry="13" fill="none" stroke="url(#ropeGrad)" strokeWidth="8" />
                 {/* Rope knot */}
@@ -286,7 +286,7 @@ export default function StrengthInUnity() {
                 <ellipse cx="-52" cy="-19" rx="5" ry="10" fill="url(#skinGrad)" stroke="#8b5a2b" strokeWidth="1.2" transform="rotate(-50 -52 -19)" />
               </g>
 
-              {/* Strain lines / sweat marks — showing the hands trying hard */}
+              {/* Strain lines / sweat marks - showing the hands trying hard */}
               <g stroke="#15803d" strokeWidth="2.5" strokeLinecap="round" fill="none">
                 {/* Left hand strain */}
                 <path d="M 545 135 Q 540 128 547 122" />
@@ -315,7 +315,7 @@ export default function StrengthInUnity() {
                 />
               </g>
 
-              {/* Glow around bundle — "protected" aura */}
+              {/* Glow around bundle - "protected" aura */}
               <circle
                 cx="675"
                 cy="230"
@@ -337,7 +337,7 @@ export default function StrengthInUnity() {
                 fill="#14532d"
                 fontFamily="system-ui, sans-serif"
               >
-                יחד — בלתי ניתנים לשבירה
+                יחד - בלתי ניתנים לשבירה
               </text>
             </g>
 
@@ -378,12 +378,12 @@ export default function StrengthInUnity() {
           </p>
           <blockquote className="text-white text-xl leading-relaxed italic">
             &ldquo;אב זקן קרא לבניו לפני מותו, נתן לכל אחד שיבול אחד וביקש שישברו
-            אותו — וכל אחד שבר בקלות. אז כרך את כל השיבולים יחד לאלומה וביקש
-            שישברו — אף אחד לא הצליח. אמר להם: &apos;כשאתם מאוחדים — אתם בלתי
+            אותו - וכל אחד שבר בקלות. אז כרך את כל השיבולים יחד לאלומה וביקש
+            שישברו - אף אחד לא הצליח. אמר להם: &apos;כשאתם מאוחדים - אתם בלתי
             ניתנים לשבירה&apos;.&rdquo;
           </blockquote>
           <p className="text-gold/70 text-sm mt-6">
-            זה הרעיון שעומד בבסיס אלומות שיבולים.
+            זה הרעיון שעומד בבסיס אלומת שיבולים.
           </p>
         </div>
       </div>

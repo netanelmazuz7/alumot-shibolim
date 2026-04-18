@@ -39,3 +39,104 @@ body {
   background-color: #d4a843;
   color: #1a365d;
 }
+
+/* Accessibility menu styles (תקנה 35) */
+:root {
+  font-size: calc(16px * var(--a11y-font-scale, 1));
+}
+
+html.a11y-contrast-high {
+  filter: contrast(1.3);
+}
+
+html.a11y-contrast-bw {
+  filter: grayscale(1) contrast(1.2);
+}
+
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-highlight-links a {
+  text-decoration: underline !important;
+  outline: 2px solid #d4a843 !important;
+  outline-offset: 2px;
+  background-color: rgba(212, 168, 67, 0.1);
+}
+
+html.a11y-readable-font,
+html.a11y-readable-font body,
+html.a11y-readable-font * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+html.a11y-big-cursor,
+html.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><path d='M6 4 L6 38 L15 30 L20 42 L26 40 L21 28 L34 28 Z' fill='black' stroke='white' stroke-width='2'/></svg>"), auto !important;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes cta-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 20px 40px -10px rgba(212, 168, 67, 0.4);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 28px 55px -5px rgba(212, 168, 67, 0.65);
+  }
+}
+.animate-cta-pulse {
+  animation: cta-pulse 2.4s ease-in-out infinite;
+}
+.animate-cta-pulse:hover {
+  animation-play-state: paused;
+}
+
+@keyframes gentle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.animate-float {
+  animation: gentle-float 3s ease-in-out infinite;
+}
+
+@keyframes arrow-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-6px); }
+}
+.animate-arrow-bounce {
+  animation: arrow-bounce 1.4s ease-in-out infinite;
+}
+
+/* Join animation - people grouping together */
+@keyframes join-fade-left {
+  0%, 20% { opacity: 0; transform: translateX(20px) scale(0.5); }
+  50%, 85% { opacity: 1; transform: translateX(0) scale(1); }
+  100% { opacity: 0; transform: translateX(20px) scale(0.5); }
+}
+@keyframes join-fade-right {
+  0%, 20% { opacity: 0; transform: translateX(-20px) scale(0.5); }
+  50%, 85% { opacity: 1; transform: translateX(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-20px) scale(0.5); }
+}
+@keyframes join-center-scale {
+  0%, 15% { transform: scale(0.9); }
+  45%, 85% { transform: scale(1); }
+  100% { transform: scale(0.9); }
+}
+.join-person-center { transform-origin: center; animation: join-center-scale 4s ease-in-out infinite; }
+.join-person-left { animation: join-fade-left 4s ease-in-out infinite; animation-delay: 0.2s; }
+.join-person-right { animation: join-fade-right 4s ease-in-out infinite; animation-delay: 0.5s; }
+
+/* Bar graph width transition (triggered by in-view class) */
+.bar-animate {
+  transition: width 1.6s cubic-bezier(0.25, 1, 0.5, 1);
+}

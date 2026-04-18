@@ -19,7 +19,7 @@ export default function Header() {
             </div>
             <div>
               <span className="text-xl font-bold text-primary block leading-tight">
-                אלומות שיבולים
+                אלומת שיבולים
               </span>
               <span className="text-xs text-gold-dark font-medium">
                 קהילת הגנה הדדית לרכב

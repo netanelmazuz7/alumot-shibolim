@@ -4,7 +4,7 @@ type WheatLogoProps = {
 };
 
 /**
- * Wheat sheaf logo — "אלומת שיבולים"
+ * Wheat sheaf logo - "אלומת שיבולים"
  * A bundle of wheat stalks tied at the middle, representing community unity
  */
 export default function WheatLogo({ className = "", size = 32 }: WheatLogoProps) {

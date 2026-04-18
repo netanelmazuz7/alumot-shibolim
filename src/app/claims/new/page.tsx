@@ -68,15 +68,15 @@ export default function NewClaimPage() {
           <div className="space-y-3">
             <div className="flex items-center gap-3 bg-green/5 rounded-xl p-3">
               <CheckCircle className="w-5 h-5 text-green" />
-              <span className="text-sm text-green">תמונות התקבלו — ניתוח AI בתהליך</span>
+              <span className="text-sm text-green">תמונות התקבלו - ניתוח AI בתהליך</span>
             </div>
             <div className="flex items-center gap-3 bg-wheat-light rounded-xl p-3">
               <Zap className="w-5 h-5 text-gold-dark" />
-              <span className="text-sm text-primary/50">הערכת נזק ראשונית — בקרוב</span>
+              <span className="text-sm text-primary/50">הערכת נזק ראשונית - בקרוב</span>
             </div>
             <div className="flex items-center gap-3 bg-wheat-light rounded-xl p-3">
               <FileText className="w-5 h-5 text-primary/30" />
-              <span className="text-sm text-primary/30">שמאי מורשה — ימונה בהמשך</span>
+              <span className="text-sm text-primary/30">שמאי מורשה - ימונה בהמשך</span>
             </div>
           </div>
 
@@ -225,7 +225,7 @@ export default function NewClaimPage() {
                   לחצו להעלאת תמונות או גררו לכאן
                 </p>
                 <p className="text-xs text-primary/20 mt-2">
-                  JPG, PNG — עד 10 תמונות
+                  JPG, PNG - עד 10 תמונות
                 </p>
               </div>
 
@@ -251,7 +251,7 @@ export default function NewClaimPage() {
                   type="text"
                   value={form.estimatedDamage}
                   onChange={(e) => set("estimatedDamage", e.target.value)}
-                  placeholder="אופציונלי — אם יש לכם הערכה"
+                  placeholder="אופציונלי - אם יש לכם הערכה"
                   className="w-full px-4 py-3 bg-wheat-light border border-wheat-dark/30 rounded-xl text-primary placeholder:text-primary/25 focus:outline-none focus:ring-2 focus:ring-gold/50"
                 />
               </div>
@@ -277,7 +277,7 @@ export default function NewClaimPage() {
                 onClick={() => setStep(1)}
                 className="flex items-center gap-2 px-8 py-3 bg-gradient-to-l from-gold to-gold-dark text-white rounded-xl font-bold shadow-lg"
               >
-                הבא — העלאת תמונות
+                הבא - העלאת תמונות
                 <Camera className="w-5 h-5" />
               </button>
             ) : (
