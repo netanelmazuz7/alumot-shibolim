@@ -41,50 +41,46 @@ export function ProtectedTogetherAnimation() {
   );
 }
 
-/** חוסכים יחד - קופת חיסכון (פיגי בנק) עם מטבע שנכנס לחריץ */
+/** חוסכים יחד - 3 מגדלי מטבעות בגובה עולה, נבנים ברצף */
 export function SavingTogetherAnimation() {
   return (
     <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-      {/* Incoming coin that falls into the slot */}
-      <g className="anim-coin-into-slot">
-        <circle cx="60" cy="10" r="6" fill="#d4a843" stroke="#b8912e" strokeWidth="1.3" />
-        <text x="60" y="14" textAnchor="middle" fontSize="8" fontWeight="900" fill="#1a365d">₪</text>
+      {/* Ground line */}
+      <line x1="20" y1="70" x2="100" y2="70" stroke="#b8912e" strokeOpacity="0.35" strokeWidth="1" />
+
+      {/* Stack 1 (left, short - 2 coins) */}
+      <g className="anim-stack-col-1" style={{ transformOrigin: "35px 70px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="35" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="35" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
       </g>
 
-      {/* Piggy bank - jiggles slightly on each coin deposit */}
-      <g className="anim-piggy-jiggle">
-        {/* Shadow */}
-        <ellipse cx="60" cy="72" rx="30" ry="3" fill="#000" opacity="0.15" />
-
-        {/* Body */}
-        <ellipse cx="60" cy="52" rx="28" ry="18" fill="#e89ab0" stroke="#c77590" strokeWidth="1.5" />
-
-        {/* Snout */}
-        <ellipse cx="84" cy="54" rx="7" ry="6" fill="#d88aa0" stroke="#c77590" strokeWidth="1.3" />
-        <circle cx="82" cy="53" r="1.2" fill="#8b4c60" />
-        <circle cx="86" cy="53" r="1.2" fill="#8b4c60" />
-
-        {/* Eye */}
-        <circle cx="74" cy="46" r="1.8" fill="#1a365d" />
-        <circle cx="74.6" cy="45.5" r="0.6" fill="white" />
-
-        {/* Ear */}
-        <path d="M 52 38 L 58 34 L 60 42 Z" fill="#d88aa0" stroke="#c77590" strokeWidth="1" />
-
-        {/* Legs */}
-        <rect x="42" y="66" width="6" height="6" rx="1" fill="#c77590" />
-        <rect x="72" y="66" width="6" height="6" rx="1" fill="#c77590" />
-
-        {/* Coin slot on top */}
-        <rect x="52" y="36" width="16" height="3" rx="1.5" fill="#1a365d" />
-
-        {/* Curly tail */}
-        <path d="M 32 52 Q 28 50 30 46 Q 32 44 34 46" fill="none" stroke="#c77590" strokeWidth="2" strokeLinecap="round" />
+      {/* Stack 2 (middle, medium - 3 coins) */}
+      <g className="anim-stack-col-2" style={{ transformOrigin: "60px 70px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="60" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="60" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="60" cy="52" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
       </g>
 
-      {/* Sparkle on deposit */}
-      <g className="anim-sparkle" transform="translate(60 38)">
-        <path d="M 0 -5 L 0 5 M -5 0 L 5 0" stroke="#d4a843" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Stack 3 (right, tallest - 4 coins) */}
+      <g className="anim-stack-col-3" style={{ transformOrigin: "85px 70px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="85" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="85" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="85" cy="52" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
+        <ellipse cx="85" cy="45" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
+      </g>
+
+      {/* Upward arrow indicator */}
+      <g className="anim-growth-arrow" style={{ transformOrigin: "60px 40px", transformBox: "fill-box" } as React.CSSProperties}>
+        <path
+          d="M 26 38 L 60 22 L 94 30"
+          stroke="#2d8a4e"
+          strokeWidth="1.8"
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray="120"
+          strokeDashoffset="0"
+        />
+        <path d="M 88 26 L 96 28 L 92 35" fill="none" stroke="#2d8a4e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </svg>
   );

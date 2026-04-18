@@ -165,30 +165,23 @@ html.a11y-big-cursor * {
 .anim-lean-left { animation: lean-in-left 3s ease-in-out infinite; }
 .anim-lean-right { animation: lean-in-right 3s ease-in-out infinite; }
 
-/* Piggy bank savings */
-@keyframes coin-into-slot {
-  0% { transform: translateY(-18px) scale(1); opacity: 0; }
+/* Savings - coin stacks rising in sequence */
+@keyframes stack-build {
+  0%, 5% { transform: scaleY(0); opacity: 0; }
   15% { opacity: 1; }
-  55% { transform: translateY(26px) scale(1); opacity: 1; }
-  65% { transform: translateY(28px) scale(0.5); opacity: 0; }
-  100% { transform: translateY(-18px) scale(1); opacity: 0; }
+  55%, 90% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 1; }
 }
-.anim-coin-into-slot { animation: coin-into-slot 2.4s ease-in infinite; transform-box: fill-box; transform-origin: center; }
+.anim-stack-col-1 { animation: stack-build 3s ease-out infinite; animation-delay: 0s; }
+.anim-stack-col-2 { animation: stack-build 3s ease-out infinite; animation-delay: 0.4s; }
+.anim-stack-col-3 { animation: stack-build 3s ease-out infinite; animation-delay: 0.8s; }
 
-@keyframes piggy-jiggle {
-  0%, 55% { transform: translateY(0) rotate(0); }
-  62% { transform: translateY(1.5px) rotate(-1deg); }
-  68% { transform: translateY(1.5px) rotate(1deg); }
-  75%, 100% { transform: translateY(0) rotate(0); }
+@keyframes arrow-draw {
+  0%, 40% { stroke-dashoffset: 120; opacity: 0; }
+  55% { opacity: 1; }
+  85%, 100% { stroke-dashoffset: 0; opacity: 1; }
 }
-.anim-piggy-jiggle { animation: piggy-jiggle 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-
-@keyframes sparkle-pop {
-  0%, 55% { opacity: 0; transform: scale(0); }
-  63% { opacity: 1; transform: scale(1.4); }
-  75%, 100% { opacity: 0; transform: scale(1.4); }
-}
-.anim-sparkle { animation: sparkle-pop 2.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+.anim-growth-arrow path { animation: arrow-draw 3s ease-out infinite; stroke-dasharray: 120; }
 
 /* ====== Claim-process strip animations ====== */
 
@@ -302,6 +295,80 @@ html.a11y-big-cursor * {
   50% { opacity: 1; }
 }
 .anim-endpoint { animation: endpoint-glow 2.8s ease-in-out infinite; }
+
+/* =========================================================
+   WHEAT PARABLE ANIMATION (6s cycle, single continuous scene)
+   0-30%:  single shaft stands, then bends, then snaps
+   30-48%: broken pieces fly apart, fade out
+   48-100%: bundle enters, bends heavily, springs back upright
+   ========================================================= */
+
+/* Phase visibility */
+@keyframes wp-phase-a-vis {
+  0%, 28% { opacity: 1; }
+  30%, 100% { opacity: 0; }
+}
+@keyframes wp-phase-b-vis {
+  0%, 28% { opacity: 0; }
+  30%, 45% { opacity: 1; }
+  48%, 100% { opacity: 0; }
+}
+@keyframes wp-phase-c-vis {
+  0%, 48% { opacity: 0; }
+  52%, 100% { opacity: 1; }
+}
+.wp-phase-a { animation: wp-phase-a-vis 6s linear infinite; }
+.wp-phase-b { animation: wp-phase-b-vis 6s linear infinite; }
+.wp-phase-c { animation: wp-phase-c-vis 6s linear infinite; }
+
+/* Single shaft: bends gradually, then at 28% snaps */
+@keyframes wp-shaft-bend {
+  0%, 5% { transform: rotate(0); }
+  15% { transform: rotate(-4deg); }
+  22% { transform: rotate(-10deg); }
+  27% { transform: rotate(-16deg); }
+  28%, 100% { transform: rotate(-18deg); }
+}
+.wp-shaft-bend { animation: wp-shaft-bend 6s ease-in-out infinite; }
+
+/* Broken pieces fly apart */
+@keyframes wp-break-top {
+  0%, 28% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  30% { transform: translate(-10px, 6px) rotate(-45deg); opacity: 1; }
+  45% { transform: translate(-30px, 30px) rotate(-80deg); opacity: 1; }
+  48%, 100% { transform: translate(-30px, 30px) rotate(-80deg); opacity: 0; }
+}
+@keyframes wp-break-bottom {
+  0%, 28% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  30% { transform: translate(8px, 4px) rotate(20deg); opacity: 1; }
+  45% { transform: translate(22px, 20px) rotate(40deg); opacity: 1; }
+  48%, 100% { transform: translate(22px, 20px) rotate(40deg); opacity: 0; }
+}
+.wp-broken-top { animation: wp-break-top 6s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+.wp-broken-bottom { animation: wp-break-bottom 6s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+
+/* Crack flash - quick burst */
+@keyframes wp-crack-flash {
+  0%, 27% { opacity: 0; transform: scale(0.3); }
+  29% { opacity: 1; transform: scale(1); }
+  33% { opacity: 0; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.wp-crack { animation: wp-crack-flash 6s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+
+/* Bundle bends heavily but doesn't break - bounces back upright */
+@keyframes wp-bundle-bend {
+  0%, 52% { transform: rotate(0) scale(0.92); }
+  58% { transform: rotate(0) scale(1); }
+  68% { transform: rotate(-12deg) scale(1); }
+  74% { transform: rotate(-18deg) scale(1); }
+  78% { transform: rotate(-16deg) scale(1); }
+  85% { transform: rotate(-8deg) scale(1); }
+  92% { transform: rotate(3deg) scale(1); }
+  96% { transform: rotate(-1deg) scale(1); }
+  100% { transform: rotate(0) scale(1); }
+}
+.wp-bundle-bend { animation: wp-bundle-bend 6s ease-in-out infinite; }
 
 /* 6. Transparency - bars grow from bottom revealing data */
 @keyframes bar-grow {
