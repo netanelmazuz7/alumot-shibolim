@@ -127,37 +127,75 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      {/* Intro comparison */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-8">
-              <div className="text-red-600 font-black text-sm mb-3 tracking-wider">
-                המודל הישן
-              </div>
-              <h3 className="text-2xl font-bold text-primary mb-4">
-                אתה משלם פרמיה. מישהו מרוויח.
-              </h3>
-              <ul className="space-y-2 text-primary/70">
-                <li>• תשלום גבוה שמחושב לפי "סיכון" וסטטיסטיקה</li>
-                <li>• חלק ניכר מהכסף הולך לשיווק, משכורות ורווחים</li>
-                <li>• אין לך מושג לאן הכסף שלך הלך</li>
-                <li>• ויכוחים ארוכים על כל תביעה</li>
-              </ul>
+      {/* Insurance requirement - critical notice */}
+      <section className="py-10 bg-amber-50 border-y-2 border-amber-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center flex-shrink-0">
+              <Shield className="w-6 h-6 text-white" />
             </div>
-            <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-8">
-              <div className="text-green-700 font-black text-sm mb-3 tracking-wider">
-                המודל החדש - אלומת שיבולים
-              </div>
-              <h3 className="text-2xl font-bold text-primary mb-4">
-                אתה חלק מקהילה. עוזרים זה לזה.
+            <div>
+              <h3 className="text-xl font-black text-primary mb-2">
+                דרישת סף: ביטוח חובה וצד ג׳
               </h3>
-              <ul className="space-y-2 text-primary/70">
-                <li>• דמי ניהול קבועים ונמוכים - יודע בדיוק על מה</li>
-                <li>• הכסף נשאר בקהילה ועוזר לחברים אחרים</li>
-                <li>• שקיפות מלאה - רואה לאן כל שקל הולך</li>
-                <li>• תהליך מהיר ומכבד עם AI ושמאי מוסמך</li>
-              </ul>
+              <p className="text-primary/80 leading-relaxed">
+                כל חבר בקהילת אלומת שיבולים מחויב להחזיק בביטוח חובה תקף
+                ובביטוח צד שלישי תקף בחברת ביטוח מורשית. הקהילה היא{" "}
+                <span className="font-bold">שכבה משלימה</span> - היא לא מחליפה
+                את הביטוחים האלה ולא באה במקומם. זו דרישה קבועה שמגנה על כולנו.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Model description (non-comparative) */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-black text-primary mb-3">
+              המודל בשתי דקות
+            </h2>
+            <p className="text-lg text-primary/60 max-w-2xl mx-auto">
+              אלומת שיבולים היא קהילת עזרה הדדית שפועלת לצד שוק הביטוח הקלאסי,
+              לא במקומו.
+            </p>
+          </div>
+          <div className="bg-cream rounded-3xl p-8 md:p-10 border-2 border-wheat-dark/20">
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="font-black text-primary mb-2">
+                  קהילה של נהגים אחראיים
+                </h3>
+                <p className="text-sm text-primary/70">
+                  חברים שעוזרים אחד לשני באירועי נזק לרכב
+                </p>
+              </div>
+              <div>
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Eye className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="font-black text-primary mb-2">
+                  שקיפות מלאה
+                </h3>
+                <p className="text-sm text-primary/70">
+                  כל שקל מתועד באזור האישי שלך
+                </p>
+              </div>
+              <div>
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Cpu className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="font-black text-primary mb-2">
+                  טכנולוגיה מתקדמת
+                </h3>
+                <p className="text-sm text-primary/70">
+                  AI ושמאים מוסמכים לטיפול מהיר
+                </p>
+              </div>
             </div>
           </div>
         </div>

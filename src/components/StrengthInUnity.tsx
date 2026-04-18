@@ -1,5 +1,5 @@
+import Image from "next/image";
 import { Heart } from "lucide-react";
-import WheatParableAnimation from "./WheatParableAnimation";
 
 export default function StrengthInUnity() {
   return (
@@ -21,10 +21,17 @@ export default function StrengthInUnity() {
           </p>
         </div>
 
-        {/* Single continuous animation */}
-        <div className="bg-white rounded-3xl shadow-2xl border-2 border-wheat-dark/10 p-6 md:p-10 mb-12 flex items-center justify-center">
-          <div className="w-full max-w-lg">
-            <WheatParableAnimation />
+        {/* Hero image */}
+        <div className="mb-12 rounded-3xl overflow-hidden shadow-2xl border-2 border-wheat-dark/20">
+          <div className="relative w-full aspect-[16/9]">
+            <Image
+              src="/aluma.png"
+              alt="אלומת שיבולים - יחד אנחנו חזקים"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
           </div>
         </div>
 
