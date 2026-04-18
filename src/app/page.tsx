@@ -5,24 +5,28 @@ import SavingsCalculator from "@/components/SavingsCalculator";
 import FAQSection from "@/components/FAQSection";
 import JoinAnimation from "@/components/JoinAnimation";
 import {
-  Shield,
-  Users,
-  Banknote,
+  ProtectedTogetherAnimation,
+  SavingTogetherAnimation,
+  CarsCollideStrip,
+  AIScanStrip,
+  AppraiserStrip,
+  CostDivideStrip,
+  FastPaymentStrip,
+  TransparencyStrip,
+} from "@/components/HomeAnimations";
+import {
   ArrowLeft,
   CheckCircle,
   Lock,
   Eye,
   Heart,
-  Car,
   FileCheck,
   UserCheck,
-  ClipboardCheck,
+  Car,
   ShieldCheck,
   Sparkles,
-  TrendingDown,
   Clock,
   Star,
-  Zap,
 } from "lucide-react";
 
 export default function Home() {
@@ -98,8 +102,10 @@ export default function Home() {
                 </Link>
               </div>
 
-              <p className="text-xs text-primary/40 mt-3">
-                ✓ ללא התחייבות &nbsp; ✓ תוצאה תוך 48 שעות &nbsp; ✓ ללא עמלה על הבדיקה
+              <p className="text-xs text-primary/40 mt-3 text-center flex flex-wrap justify-center gap-x-4 gap-y-1">
+                <span>✓ ללא התחייבות</span>
+                <span>✓ תוצאה תוך 48 שעות</span>
+                <span>✓ ללא עמלה על הבדיקה</span>
               </p>
             </div>
 
@@ -204,8 +210,8 @@ export default function Home() {
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 2
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-green/10 flex items-center justify-center mb-6">
-                <Shield className="w-8 h-8 text-green" />
+              <div className="w-20 h-20 rounded-2xl bg-green/10 flex items-center justify-center mb-6">
+                <ProtectedTogetherAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
                 מוגנים יחד
@@ -221,11 +227,11 @@ export default function Home() {
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 3
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
-                <Banknote className="w-8 h-8 text-primary" />
+              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                <SavingTogetherAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
-                חוסכים אלפים
+                חוסכים יחד
               </h3>
               <p className="text-primary/50 leading-relaxed">
                 ללא מתווכים ורווחי ענק - העלות האמיתית של הגנה מקיפה נמוכה
@@ -322,10 +328,11 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link
               href="/join"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-l from-gold to-gold-dark text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
+              className="group relative inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-l from-gold via-gold-dark to-gold text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-cta-pulse overflow-hidden"
             >
-              הצטרפו וחסכו עכשיו
-              <ArrowLeft className="w-5 h-5" />
+              <span className="absolute inset-0 bg-gradient-to-l from-green/0 via-white/20 to-green/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <span className="relative">הצטרפו וחסכו עכשיו</span>
+              <ArrowLeft className="relative w-5 h-5 animate-arrow-bounce" />
             </Link>
           </div>
         </div>
@@ -425,57 +432,41 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
-                icon: Car,
+                Strip: CarsCollideStrip,
                 title: "דיווח על אירוע",
                 desc: "מעלים תמונות + תיאור דרך האפליקציה. פשוט ומהיר.",
-                color: "bg-primary/10",
-                iconColor: "text-primary",
               },
               {
-                icon: Zap,
+                Strip: AIScanStrip,
                 title: "ניתוח AI מיידי",
                 desc: "AI מתקדם מנתח את הנזק ונותן הערכה ראשונית תוך דקות.",
-                color: "bg-gold/10",
-                iconColor: "text-gold-dark",
               },
               {
-                icon: ClipboardCheck,
+                Strip: AppraiserStrip,
                 title: "אישור שמאי",
                 desc: "שמאי מורשה מאשר את הנזק. לנזקים גדולים - חוקר פרטי נוסף.",
-                color: "bg-green/10",
-                iconColor: "text-green",
               },
               {
-                icon: Users,
+                Strip: CostDivideStrip,
                 title: "חלוקת עלות",
                 desc: "הסכום מתחלק בין כל חברי הקהילה - יחסית לשווי הרכב.",
-                color: "bg-primary/10",
-                iconColor: "text-primary",
               },
               {
-                icon: Banknote,
+                Strip: FastPaymentStrip,
                 title: "תשלום מהיר",
                 desc: "הכסף מועבר ישירות לחבר הנפגע. ללא ביורוקרטיה מיותרת.",
-                color: "bg-gold/10",
-                iconColor: "text-gold-dark",
               },
               {
-                icon: Eye,
+                Strip: TransparencyStrip,
                 title: "שקיפות מלאה",
                 desc: "כל חבר רואה בדיוק לאן הכסף הלך ומי קיבל כמה.",
-                color: "bg-green/10",
-                iconColor: "text-green",
               },
             ].map((item) => (
               <div
                 key={item.title}
                 className="bg-white rounded-2xl p-6 shadow-md border border-wheat-dark/10"
               >
-                <div
-                  className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center mb-4`}
-                >
-                  <item.icon className={`w-6 h-6 ${item.iconColor}`} />
-                </div>
+                <item.Strip />
                 <h3 className="font-bold text-primary mb-2">{item.title}</h3>
                 <p className="text-sm text-primary/50 leading-relaxed">
                   {item.desc}

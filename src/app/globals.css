@@ -140,3 +140,139 @@ html.a11y-big-cursor * {
 .bar-animate {
   transition: width 1.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
+/* =========================================================
+   PROCESS / SECTION ANIMATIONS (travel across a card)
+   ========================================================= */
+
+/* Two cars colliding in the middle */
+@keyframes car-collide-right {
+  0% { transform: translateX(100%); }
+  40%, 55% { transform: translateX(0); }
+  65% { transform: translateX(-6%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes car-collide-left {
+  0% { transform: translateX(-100%) scaleX(-1); }
+  40%, 55% { transform: translateX(0) scaleX(-1); }
+  65% { transform: translateX(6%) scaleX(-1); }
+  100% { transform: translateX(-100%) scaleX(-1); }
+}
+.anim-car-right { animation: car-collide-right 4s ease-in-out infinite; }
+.anim-car-left { animation: car-collide-left 4s ease-in-out infinite; }
+
+/* Crash burst at center */
+@keyframes crash-burst {
+  0%, 38% { opacity: 0; transform: scale(0.3); }
+  45%, 55% { opacity: 1; transform: scale(1.1); }
+  65%, 100% { opacity: 0; transform: scale(0.3); }
+}
+.anim-crash { animation: crash-burst 4s ease-in-out infinite; transform-origin: center; }
+
+/* AI scan line sweeping across */
+@keyframes ai-scan {
+  0% { transform: translateX(-120%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+.anim-scan { animation: ai-scan 3s ease-in-out infinite; }
+
+@keyframes ai-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+.anim-ai-pulse { animation: ai-pulse 1.5s ease-in-out infinite; transform-origin: center; }
+
+/* Clipboard slides across (RTL) with a stamping pause */
+@keyframes stamp-slide {
+  0% { transform: translateX(110%); }
+  30%, 60% { transform: translateX(0); }
+  100% { transform: translateX(-110%); }
+}
+.anim-stamp-slide { animation: stamp-slide 3.5s ease-in-out infinite; }
+
+@keyframes stamp-pop {
+  0%, 30% { opacity: 0; transform: scale(0.2); }
+  40%, 55% { opacity: 1; transform: scale(1); }
+  60%, 100% { opacity: 1; transform: scale(1); }
+}
+.anim-stamp-pop { animation: stamp-pop 3.5s ease-in-out infinite; transform-origin: center; }
+
+/* Coins splitting outward */
+@keyframes coin-out-left {
+  0%, 20% { transform: translate(0, 0); opacity: 0; }
+  30% { opacity: 1; }
+  80%, 100% { transform: translate(-140px, -10px); opacity: 0; }
+}
+@keyframes coin-out-right {
+  0%, 20% { transform: translate(0, 0); opacity: 0; }
+  30% { opacity: 1; }
+  80%, 100% { transform: translate(140px, -10px); opacity: 0; }
+}
+@keyframes coin-out-up-left {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  80%, 100% { transform: translate(-90px, -30px); opacity: 0; }
+}
+@keyframes coin-out-up-right {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  80%, 100% { transform: translate(90px, -30px); opacity: 0; }
+}
+.anim-coin-l { animation: coin-out-left 2.8s ease-out infinite; }
+.anim-coin-r { animation: coin-out-right 2.8s ease-out infinite; animation-delay: 0.2s; }
+.anim-coin-ul { animation: coin-out-up-left 2.8s ease-out infinite; animation-delay: 0.4s; }
+.anim-coin-ur { animation: coin-out-up-right 2.8s ease-out infinite; animation-delay: 0.6s; }
+
+/* Banknote flying across */
+@keyframes money-fly {
+  0% { transform: translateX(110%) rotate(-8deg); opacity: 0; }
+  15%, 85% { opacity: 1; }
+  50% { transform: translateX(0) rotate(4deg); }
+  100% { transform: translateX(-110%) rotate(-8deg); opacity: 0; }
+}
+.anim-money-fly { animation: money-fly 3s ease-in-out infinite; }
+
+/* Expanding transparency rings */
+@keyframes eye-ring {
+  0% { transform: scale(0.4); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.anim-ring-1 { animation: eye-ring 2.4s ease-out infinite; transform-origin: center; }
+.anim-ring-2 { animation: eye-ring 2.4s ease-out infinite; animation-delay: 0.8s; transform-origin: center; }
+.anim-ring-3 { animation: eye-ring 2.4s ease-out infinite; animation-delay: 1.6s; transform-origin: center; }
+
+/* Shield pulse (protected together) */
+@keyframes shield-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(45, 138, 78, 0.4)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(45, 138, 78, 0.6)); }
+}
+.anim-shield-pulse { animation: shield-pulse 2.4s ease-in-out infinite; transform-origin: center; }
+
+@keyframes person-lean-left {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+@keyframes person-lean-right {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+}
+.anim-lean-l { animation: person-lean-left 2.4s ease-in-out infinite; }
+.anim-lean-r { animation: person-lean-right 2.4s ease-in-out infinite; }
+
+/* Savings - coin stack growing */
+@keyframes coin-stack-grow {
+  0%, 100% { transform: scaleY(0.6); opacity: 0.8; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+.anim-stack { animation: coin-stack-grow 2s ease-in-out infinite; transform-origin: bottom center; }
+
+@keyframes coin-fall {
+  0% { transform: translateY(-40px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.anim-coin-fall-1 { animation: coin-fall 2s ease-in infinite; }
+.anim-coin-fall-2 { animation: coin-fall 2s ease-in infinite; animation-delay: 0.5s; }
+.anim-coin-fall-3 { animation: coin-fall 2s ease-in infinite; animation-delay: 1s; }
