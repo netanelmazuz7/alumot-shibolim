@@ -165,23 +165,53 @@ html.a11y-big-cursor * {
 .anim-lean-left { animation: lean-in-left 3s ease-in-out infinite; }
 .anim-lean-right { animation: lean-in-right 3s ease-in-out infinite; }
 
-/* Savings - coin stacks rising in sequence */
-@keyframes stack-build {
-  0%, 5% { transform: scaleY(0); opacity: 0; }
-  15% { opacity: 1; }
-  55%, 90% { transform: scaleY(1); opacity: 1; }
-  100% { transform: scaleY(1); opacity: 1; }
+/* Savings - rising line graph */
+@keyframes graph-line-draw {
+  0% { stroke-dashoffset: 160; opacity: 0; }
+  10% { opacity: 1; }
+  70%, 100% { stroke-dashoffset: 0; opacity: 1; }
 }
-.anim-stack-col-1 { animation: stack-build 3s ease-out infinite; animation-delay: 0s; }
-.anim-stack-col-2 { animation: stack-build 3s ease-out infinite; animation-delay: 0.4s; }
-.anim-stack-col-3 { animation: stack-build 3s ease-out infinite; animation-delay: 0.8s; }
+.anim-graph-line {
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: graph-line-draw 3.2s ease-out infinite;
+}
 
-@keyframes arrow-draw {
-  0%, 40% { stroke-dashoffset: 120; opacity: 0; }
-  55% { opacity: 1; }
-  85%, 100% { stroke-dashoffset: 0; opacity: 1; }
+@keyframes graph-fill-in {
+  0%, 55% { opacity: 0; }
+  75%, 100% { opacity: 1; }
 }
-.anim-growth-arrow path { animation: arrow-draw 3s ease-out infinite; stroke-dasharray: 120; }
+.anim-graph-fill { opacity: 0; animation: graph-fill-in 3.2s ease-out infinite; }
+
+@keyframes graph-dot-pop {
+  0%, 100% { transform: scale(0); opacity: 0; }
+  15%, 90% { transform: scale(1); opacity: 1; }
+}
+.anim-graph-dot-1,
+.anim-graph-dot-2,
+.anim-graph-dot-3,
+.anim-graph-dot-4 {
+  transform-origin: center;
+  transform-box: fill-box;
+  opacity: 0;
+  animation: graph-dot-pop 3.2s ease-out infinite;
+}
+.anim-graph-dot-1 { animation-delay: 0.3s; }
+.anim-graph-dot-2 { animation-delay: 0.8s; }
+.anim-graph-dot-3 { animation-delay: 1.3s; }
+.anim-graph-dot-4 { animation-delay: 1.8s; }
+
+@keyframes graph-badge-pop {
+  0%, 70% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.25); opacity: 1; }
+  90%, 100% { transform: scale(1); opacity: 1; }
+}
+.anim-graph-dot-final {
+  transform-origin: 100px 14px;
+  transform-box: view-box;
+  opacity: 0;
+  animation: graph-badge-pop 3.2s ease-out infinite;
+}
 
 /* ====== Claim-process strip animations ====== */
 

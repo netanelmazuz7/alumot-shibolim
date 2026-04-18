@@ -41,35 +41,50 @@ export function ProtectedTogetherAnimation() {
   );
 }
 
-/** חוסכים יחד - 3 מגדלי מטבעות בגובה עולה, נבנים ברצף */
+/** חוסכים יחד - גרף קו עולה עם ₪ בקצה */
 export function SavingTogetherAnimation() {
   return (
     <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-      {/* Ground line */}
-      <line x1="15" y1="72" x2="105" y2="72" stroke="#b8912e" strokeOpacity="0.4" strokeWidth="1.2" />
-
-      {/* Stack 1 (left, short - 2 coins) */}
-      <g className="anim-stack-col-1" style={{ transformOrigin: "30px 72px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="30" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="30" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
-        <text x="30" y="61" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
+      {/* Grid - very subtle */}
+      <g stroke="#1a365d" strokeOpacity="0.08" strokeWidth="0.6">
+        <line x1="15" y1="20" x2="105" y2="20" />
+        <line x1="15" y1="35" x2="105" y2="35" />
+        <line x1="15" y1="50" x2="105" y2="50" />
       </g>
 
-      {/* Stack 2 (middle, medium - 3 coins) */}
-      <g className="anim-stack-col-2" style={{ transformOrigin: "60px 72px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="60" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="60" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="60" cy="51" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <text x="60" y="53" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
-      </g>
+      {/* Axes */}
+      <line x1="15" y1="15" x2="15" y2="65" stroke="#1a365d" strokeOpacity="0.4" strokeWidth="1.2" />
+      <line x1="15" y1="65" x2="105" y2="65" stroke="#1a365d" strokeOpacity="0.4" strokeWidth="1.2" />
 
-      {/* Stack 3 (right, tallest - 4 coins) */}
-      <g className="anim-stack-col-3" style={{ transformOrigin: "90px 72px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="90" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="90" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="90" cy="51" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <ellipse cx="90" cy="43" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
-        <text x="90" y="45" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
+      {/* Filled area under the line */}
+      <path
+        d="M 22 58 L 42 48 L 62 38 L 82 24 L 100 14 L 100 65 L 22 65 Z"
+        fill="#2d8a4e"
+        fillOpacity="0.12"
+        className="anim-graph-fill"
+      />
+
+      {/* The rising line - draws itself */}
+      <path
+        d="M 22 58 L 42 48 L 62 38 L 82 24 L 100 14"
+        fill="none"
+        stroke="#2d8a4e"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="anim-graph-line"
+      />
+
+      {/* Data points appearing in sequence */}
+      <circle cx="22" cy="58" r="2.5" fill="#2d8a4e" className="anim-graph-dot-1" />
+      <circle cx="42" cy="48" r="2.5" fill="#2d8a4e" className="anim-graph-dot-2" />
+      <circle cx="62" cy="38" r="2.5" fill="#2d8a4e" className="anim-graph-dot-3" />
+      <circle cx="82" cy="24" r="2.5" fill="#2d8a4e" className="anim-graph-dot-4" />
+
+      {/* Final point - bigger, with ₪ badge */}
+      <g className="anim-graph-dot-final" style={{ transformOrigin: "100px 14px", transformBox: "fill-box" } as React.CSSProperties}>
+        <circle cx="100" cy="14" r="7" fill="#d4a843" stroke="#b8912e" strokeWidth="1.3" />
+        <text x="100" y="17" textAnchor="middle" fontSize="8" fontWeight="900" fill="#1a365d">₪</text>
       </g>
     </svg>
   );
