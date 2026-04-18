@@ -142,137 +142,188 @@ html.a11y-big-cursor * {
 }
 
 /* =========================================================
-   PROCESS / SECTION ANIMATIONS (travel across a card)
+   PROCESS / SECTION ANIMATIONS (refined, professional)
+   All SVG-based, soft easing, subtle - no emoji, no jank.
    ========================================================= */
 
-/* Two cars colliding in the middle */
-@keyframes car-collide-right {
-  0% { transform: translateX(100%); }
+/* Gentle float for shield */
+@keyframes shield-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.04); }
+}
+.anim-shield-breathe { animation: shield-breathe 3s ease-in-out infinite; transform-origin: center; }
+
+/* Soft side-to-shield lean */
+@keyframes lean-in-left {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(3px) translateY(-1px); }
+}
+@keyframes lean-in-right {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-3px) translateY(-1px); }
+}
+.anim-lean-left { animation: lean-in-left 3s ease-in-out infinite; }
+.anim-lean-right { animation: lean-in-right 3s ease-in-out infinite; }
+
+/* Coin fall (saving animation) */
+@keyframes coin-drop {
+  0% { transform: translateY(-28px); opacity: 0; }
+  15% { opacity: 1; }
+  70% { transform: translateY(0); opacity: 1; }
+  85%, 100% { transform: translateY(0); opacity: 0; }
+}
+.anim-coin-drop-1 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 0s; }
+.anim-coin-drop-2 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 0.6s; }
+.anim-coin-drop-3 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 1.2s; }
+
+@keyframes stack-rise {
+  0% { transform: scaleY(0.3); opacity: 0.4; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+.anim-stack-rise { animation: stack-rise 2.4s ease-out infinite; transform-origin: bottom center; }
+
+/* ====== Claim-process strip animations (clean, consistent 4s cycles) ====== */
+
+/* 1. Cars collide - smooth approach, small shake, reset */
+@keyframes car-approach-r {
+  0% { transform: translateX(60%); }
   40%, 55% { transform: translateX(0); }
-  65% { transform: translateX(-6%); }
-  100% { transform: translateX(100%); }
+  60% { transform: translateX(-2%); }
+  65% { transform: translateX(1%); }
+  70%, 100% { transform: translateX(0); opacity: 0; }
+  71% { opacity: 1; }
 }
-@keyframes car-collide-left {
-  0% { transform: translateX(-100%) scaleX(-1); }
+@keyframes car-approach-l {
+  0% { transform: translateX(-60%) scaleX(-1); }
   40%, 55% { transform: translateX(0) scaleX(-1); }
-  65% { transform: translateX(6%) scaleX(-1); }
-  100% { transform: translateX(-100%) scaleX(-1); }
+  60% { transform: translateX(2%) scaleX(-1); }
+  65% { transform: translateX(-1%) scaleX(-1); }
+  70%, 100% { transform: translateX(0) scaleX(-1); opacity: 0; }
+  71% { opacity: 1; }
 }
-.anim-car-right { animation: car-collide-right 4s ease-in-out infinite; }
-.anim-car-left { animation: car-collide-left 4s ease-in-out infinite; }
-
-/* Crash burst at center */
-@keyframes crash-burst {
-  0%, 38% { opacity: 0; transform: scale(0.3); }
-  45%, 55% { opacity: 1; transform: scale(1.1); }
-  65%, 100% { opacity: 0; transform: scale(0.3); }
+@keyframes car-loop-r {
+  0% { transform: translateX(60%); opacity: 1; }
+  40%, 55% { transform: translateX(0); opacity: 1; }
+  60% { transform: translateX(-2%); }
+  68% { transform: translateX(0); opacity: 1; }
+  75% { opacity: 0; }
+  100% { transform: translateX(60%); opacity: 0; }
 }
-.anim-crash { animation: crash-burst 4s ease-in-out infinite; transform-origin: center; }
+@keyframes car-loop-l {
+  0% { transform: translateX(-60%) scaleX(-1); opacity: 1; }
+  40%, 55% { transform: translateX(0) scaleX(-1); opacity: 1; }
+  60% { transform: translateX(2%) scaleX(-1); }
+  68% { transform: translateX(0) scaleX(-1); opacity: 1; }
+  75% { opacity: 0; }
+  100% { transform: translateX(-60%) scaleX(-1); opacity: 0; }
+}
+.anim-car-r { animation: car-loop-r 4s ease-in-out infinite; }
+.anim-car-l { animation: car-loop-l 4s ease-in-out infinite; }
 
-/* AI scan line sweeping across */
-@keyframes ai-scan {
-  0% { transform: translateX(-120%); opacity: 0; }
+@keyframes impact-spark {
+  0%, 55% { opacity: 0; transform: scale(0); }
+  60% { opacity: 1; transform: scale(1); }
+  72% { opacity: 0; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.anim-spark { animation: impact-spark 4s ease-out infinite; transform-origin: center; }
+
+/* 2. AI scan - smooth sweep with fade in/out */
+@keyframes scan-sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+.anim-scan-sweep { animation: scan-sweep 2.4s ease-in-out infinite; }
+
+@keyframes detect-dot {
+  0%, 30% { opacity: 0; transform: scale(0); }
+  40%, 70% { opacity: 1; transform: scale(1); }
+  80%, 100% { opacity: 0; transform: scale(0); }
+}
+.anim-dot-1 { animation: detect-dot 2.4s ease-in-out infinite; animation-delay: 0.3s; transform-origin: center; }
+.anim-dot-2 { animation: detect-dot 2.4s ease-in-out infinite; animation-delay: 0.9s; transform-origin: center; }
+.anim-dot-3 { animation: detect-dot 2.4s ease-in-out infinite; animation-delay: 1.5s; transform-origin: center; }
+
+/* 3. Checklist - rows check sequentially */
+@keyframes check-appear {
+  0%, 20% { opacity: 0; transform: scale(0); }
+  30% { opacity: 1; transform: scale(1.2); }
+  40%, 85% { opacity: 1; transform: scale(1); }
+  95%, 100% { opacity: 0; transform: scale(1); }
+}
+.anim-check-1 { animation: check-appear 3.6s ease-out infinite; animation-delay: 0s; transform-origin: center; }
+.anim-check-2 { animation: check-appear 3.6s ease-out infinite; animation-delay: 0.5s; transform-origin: center; }
+.anim-check-3 { animation: check-appear 3.6s ease-out infinite; animation-delay: 1s; transform-origin: center; }
+
+@keyframes row-highlight {
+  0%, 20% { opacity: 0.3; }
+  30%, 85% { opacity: 1; }
+  95%, 100% { opacity: 0.3; }
+}
+.anim-row-1 { animation: row-highlight 3.6s ease-out infinite; animation-delay: 0s; }
+.anim-row-2 { animation: row-highlight 3.6s ease-out infinite; animation-delay: 0.5s; }
+.anim-row-3 { animation: row-highlight 3.6s ease-out infinite; animation-delay: 1s; }
+
+/* 4. Cost divide - central coin splits to people */
+@keyframes split-tl {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  90%, 100% { transform: translate(-56px, -14px); opacity: 0; }
+}
+@keyframes split-tr {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  90%, 100% { transform: translate(56px, -14px); opacity: 0; }
+}
+@keyframes split-bl {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  90%, 100% { transform: translate(-56px, 14px); opacity: 0; }
+}
+@keyframes split-br {
+  0%, 25% { transform: translate(0, 0); opacity: 0; }
+  35% { opacity: 1; }
+  90%, 100% { transform: translate(56px, 14px); opacity: 0; }
+}
+.anim-split-tl { animation: split-tl 3s ease-out infinite; }
+.anim-split-tr { animation: split-tr 3s ease-out infinite; }
+.anim-split-bl { animation: split-bl 3s ease-out infinite; }
+.anim-split-br { animation: split-br 3s ease-out infinite; }
+
+@keyframes center-pulse {
+  0%, 20% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(1.15); }
+  40%, 100% { transform: scale(1); opacity: 0.85; }
+}
+.anim-center-pulse { animation: center-pulse 3s ease-in-out infinite; transform-origin: center; }
+
+/* 5. Money fly - banknote travels along dotted path */
+@keyframes money-travel {
+  0% { transform: translateX(45%) translateY(0) rotate(-4deg); opacity: 0; }
   10% { opacity: 1; }
+  50% { transform: translateX(0) translateY(-2px) rotate(2deg); }
   90% { opacity: 1; }
-  100% { transform: translateX(120%); opacity: 0; }
+  100% { transform: translateX(-45%) translateY(0) rotate(-4deg); opacity: 0; }
 }
-.anim-scan { animation: ai-scan 3s ease-in-out infinite; }
+.anim-money-travel { animation: money-travel 2.8s ease-in-out infinite; }
 
-@keyframes ai-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.08); opacity: 1; }
+@keyframes endpoint-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
-.anim-ai-pulse { animation: ai-pulse 1.5s ease-in-out infinite; transform-origin: center; }
+.anim-endpoint { animation: endpoint-glow 2.8s ease-in-out infinite; }
 
-/* Clipboard slides across (RTL) with a stamping pause */
-@keyframes stamp-slide {
-  0% { transform: translateX(110%); }
-  30%, 60% { transform: translateX(0); }
-  100% { transform: translateX(-110%); }
+/* 6. Transparency - rings expanding from center */
+@keyframes ring-expand {
+  0% { transform: scale(0.3); opacity: 0.9; }
+  100% { transform: scale(2); opacity: 0; }
 }
-.anim-stamp-slide { animation: stamp-slide 3.5s ease-in-out infinite; }
+.anim-ring-1 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 0s; transform-origin: center; transform-box: fill-box; }
+.anim-ring-2 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 0.8s; transform-origin: center; transform-box: fill-box; }
+.anim-ring-3 { animation: ring-expand 2.4s ease-out infinite; animation-delay: 1.6s; transform-origin: center; transform-box: fill-box; }
 
-@keyframes stamp-pop {
-  0%, 30% { opacity: 0; transform: scale(0.2); }
-  40%, 55% { opacity: 1; transform: scale(1); }
-  60%, 100% { opacity: 1; transform: scale(1); }
+@keyframes eye-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
 }
-.anim-stamp-pop { animation: stamp-pop 3.5s ease-in-out infinite; transform-origin: center; }
-
-/* Coins splitting outward */
-@keyframes coin-out-left {
-  0%, 20% { transform: translate(0, 0); opacity: 0; }
-  30% { opacity: 1; }
-  80%, 100% { transform: translate(-140px, -10px); opacity: 0; }
-}
-@keyframes coin-out-right {
-  0%, 20% { transform: translate(0, 0); opacity: 0; }
-  30% { opacity: 1; }
-  80%, 100% { transform: translate(140px, -10px); opacity: 0; }
-}
-@keyframes coin-out-up-left {
-  0%, 25% { transform: translate(0, 0); opacity: 0; }
-  35% { opacity: 1; }
-  80%, 100% { transform: translate(-90px, -30px); opacity: 0; }
-}
-@keyframes coin-out-up-right {
-  0%, 25% { transform: translate(0, 0); opacity: 0; }
-  35% { opacity: 1; }
-  80%, 100% { transform: translate(90px, -30px); opacity: 0; }
-}
-.anim-coin-l { animation: coin-out-left 2.8s ease-out infinite; }
-.anim-coin-r { animation: coin-out-right 2.8s ease-out infinite; animation-delay: 0.2s; }
-.anim-coin-ul { animation: coin-out-up-left 2.8s ease-out infinite; animation-delay: 0.4s; }
-.anim-coin-ur { animation: coin-out-up-right 2.8s ease-out infinite; animation-delay: 0.6s; }
-
-/* Banknote flying across */
-@keyframes money-fly {
-  0% { transform: translateX(110%) rotate(-8deg); opacity: 0; }
-  15%, 85% { opacity: 1; }
-  50% { transform: translateX(0) rotate(4deg); }
-  100% { transform: translateX(-110%) rotate(-8deg); opacity: 0; }
-}
-.anim-money-fly { animation: money-fly 3s ease-in-out infinite; }
-
-/* Expanding transparency rings */
-@keyframes eye-ring {
-  0% { transform: scale(0.4); opacity: 0.8; }
-  100% { transform: scale(1.6); opacity: 0; }
-}
-.anim-ring-1 { animation: eye-ring 2.4s ease-out infinite; transform-origin: center; }
-.anim-ring-2 { animation: eye-ring 2.4s ease-out infinite; animation-delay: 0.8s; transform-origin: center; }
-.anim-ring-3 { animation: eye-ring 2.4s ease-out infinite; animation-delay: 1.6s; transform-origin: center; }
-
-/* Shield pulse (protected together) */
-@keyframes shield-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(45, 138, 78, 0.4)); }
-  50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(45, 138, 78, 0.6)); }
-}
-.anim-shield-pulse { animation: shield-pulse 2.4s ease-in-out infinite; transform-origin: center; }
-
-@keyframes person-lean-left {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
-}
-@keyframes person-lean-right {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-4px); }
-}
-.anim-lean-l { animation: person-lean-left 2.4s ease-in-out infinite; }
-.anim-lean-r { animation: person-lean-right 2.4s ease-in-out infinite; }
-
-/* Savings - coin stack growing */
-@keyframes coin-stack-grow {
-  0%, 100% { transform: scaleY(0.6); opacity: 0.8; }
-  50% { transform: scaleY(1); opacity: 1; }
-}
-.anim-stack { animation: coin-stack-grow 2s ease-in-out infinite; transform-origin: bottom center; }
-
-@keyframes coin-fall {
-  0% { transform: translateY(-40px); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-.anim-coin-fall-1 { animation: coin-fall 2s ease-in infinite; }
-.anim-coin-fall-2 { animation: coin-fall 2s ease-in infinite; animation-delay: 0.5s; }
-.anim-coin-fall-3 { animation: coin-fall 2s ease-in infinite; animation-delay: 1s; }
+.anim-eye-blink { animation: eye-blink 4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
