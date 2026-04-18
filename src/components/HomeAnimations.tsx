@@ -46,41 +46,30 @@ export function SavingTogetherAnimation() {
   return (
     <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
       {/* Ground line */}
-      <line x1="20" y1="70" x2="100" y2="70" stroke="#b8912e" strokeOpacity="0.35" strokeWidth="1" />
+      <line x1="15" y1="72" x2="105" y2="72" stroke="#b8912e" strokeOpacity="0.4" strokeWidth="1.2" />
 
       {/* Stack 1 (left, short - 2 coins) */}
-      <g className="anim-stack-col-1" style={{ transformOrigin: "35px 70px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="35" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="35" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
+      <g className="anim-stack-col-1" style={{ transformOrigin: "30px 72px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="30" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="30" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
+        <text x="30" y="61" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
       </g>
 
       {/* Stack 2 (middle, medium - 3 coins) */}
-      <g className="anim-stack-col-2" style={{ transformOrigin: "60px 70px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="60" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="60" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="60" cy="52" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
+      <g className="anim-stack-col-2" style={{ transformOrigin: "60px 72px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="60" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="60" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="60" cy="51" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+        <text x="60" y="53" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
       </g>
 
       {/* Stack 3 (right, tallest - 4 coins) */}
-      <g className="anim-stack-col-3" style={{ transformOrigin: "85px 70px", transformBox: "fill-box" } as React.CSSProperties}>
-        <ellipse cx="85" cy="66" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="85" cy="59" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="85" cy="52" rx="11" ry="3.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1" />
-        <ellipse cx="85" cy="45" rx="11" ry="3.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1" />
-      </g>
-
-      {/* Upward arrow indicator */}
-      <g className="anim-growth-arrow" style={{ transformOrigin: "60px 40px", transformBox: "fill-box" } as React.CSSProperties}>
-        <path
-          d="M 26 38 L 60 22 L 94 30"
-          stroke="#2d8a4e"
-          strokeWidth="1.8"
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray="120"
-          strokeDashoffset="0"
-        />
-        <path d="M 88 26 L 96 28 L 92 35" fill="none" stroke="#2d8a4e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <g className="anim-stack-col-3" style={{ transformOrigin: "90px 72px", transformBox: "fill-box" } as React.CSSProperties}>
+        <ellipse cx="90" cy="67" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="90" cy="59" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="90" cy="51" rx="13" ry="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+        <ellipse cx="90" cy="43" rx="13" ry="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
+        <text x="90" y="45" textAnchor="middle" fontSize="6" fontWeight="900" fill="#1a365d">₪</text>
       </g>
     </svg>
   );
