@@ -165,22 +165,30 @@ html.a11y-big-cursor * {
 .anim-lean-left { animation: lean-in-left 3s ease-in-out infinite; }
 .anim-lean-right { animation: lean-in-right 3s ease-in-out infinite; }
 
-/* Coin fall (saving animation) */
-@keyframes coin-drop {
-  0% { transform: translateY(-28px); opacity: 0; }
+/* Piggy bank savings */
+@keyframes coin-into-slot {
+  0% { transform: translateY(-18px) scale(1); opacity: 0; }
   15% { opacity: 1; }
-  70% { transform: translateY(0); opacity: 1; }
-  85%, 100% { transform: translateY(0); opacity: 0; }
+  55% { transform: translateY(26px) scale(1); opacity: 1; }
+  65% { transform: translateY(28px) scale(0.5); opacity: 0; }
+  100% { transform: translateY(-18px) scale(1); opacity: 0; }
 }
-.anim-coin-drop-1 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 0s; }
-.anim-coin-drop-2 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 0.6s; }
-.anim-coin-drop-3 { animation: coin-drop 2.4s ease-in infinite; animation-delay: 1.2s; }
+.anim-coin-into-slot { animation: coin-into-slot 2.4s ease-in infinite; transform-box: fill-box; transform-origin: center; }
 
-@keyframes stack-rise {
-  0% { transform: scaleY(0.3); opacity: 0.4; }
-  100% { transform: scaleY(1); opacity: 1; }
+@keyframes piggy-jiggle {
+  0%, 55% { transform: translateY(0) rotate(0); }
+  62% { transform: translateY(1.5px) rotate(-1deg); }
+  68% { transform: translateY(1.5px) rotate(1deg); }
+  75%, 100% { transform: translateY(0) rotate(0); }
 }
-.anim-stack-rise { animation: stack-rise 2.4s ease-out infinite; transform-origin: bottom center; }
+.anim-piggy-jiggle { animation: piggy-jiggle 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
+@keyframes sparkle-pop {
+  0%, 55% { opacity: 0; transform: scale(0); }
+  63% { opacity: 1; transform: scale(1.4); }
+  75%, 100% { opacity: 0; transform: scale(1.4); }
+}
+.anim-sparkle { animation: sparkle-pop 2.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
 
 /* ====== Claim-process strip animations ====== */
 

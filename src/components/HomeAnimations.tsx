@@ -41,27 +41,50 @@ export function ProtectedTogetherAnimation() {
   );
 }
 
-/** חוסכים יחד - מטבעות נופלים לערימה */
+/** חוסכים יחד - קופת חיסכון (פיגי בנק) עם מטבע שנכנס לחריץ */
 export function SavingTogetherAnimation() {
   return (
     <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-      <g className="anim-coin-drop-1">
-        <circle cx="60" cy="18" r="6.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1.3" />
-        <text x="60" y="22" textAnchor="middle" fontSize="9" fontWeight="900" fill="#1a365d">₪</text>
+      {/* Incoming coin that falls into the slot */}
+      <g className="anim-coin-into-slot">
+        <circle cx="60" cy="10" r="6" fill="#d4a843" stroke="#b8912e" strokeWidth="1.3" />
+        <text x="60" y="14" textAnchor="middle" fontSize="8" fontWeight="900" fill="#1a365d">₪</text>
       </g>
-      <g className="anim-coin-drop-2">
-        <circle cx="42" cy="18" r="6.5" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.3" />
-        <text x="42" y="22" textAnchor="middle" fontSize="9" fontWeight="900" fill="#1a365d">₪</text>
+
+      {/* Piggy bank - jiggles slightly on each coin deposit */}
+      <g className="anim-piggy-jiggle">
+        {/* Shadow */}
+        <ellipse cx="60" cy="72" rx="30" ry="3" fill="#000" opacity="0.15" />
+
+        {/* Body */}
+        <ellipse cx="60" cy="52" rx="28" ry="18" fill="#e89ab0" stroke="#c77590" strokeWidth="1.5" />
+
+        {/* Snout */}
+        <ellipse cx="84" cy="54" rx="7" ry="6" fill="#d88aa0" stroke="#c77590" strokeWidth="1.3" />
+        <circle cx="82" cy="53" r="1.2" fill="#8b4c60" />
+        <circle cx="86" cy="53" r="1.2" fill="#8b4c60" />
+
+        {/* Eye */}
+        <circle cx="74" cy="46" r="1.8" fill="#1a365d" />
+        <circle cx="74.6" cy="45.5" r="0.6" fill="white" />
+
+        {/* Ear */}
+        <path d="M 52 38 L 58 34 L 60 42 Z" fill="#d88aa0" stroke="#c77590" strokeWidth="1" />
+
+        {/* Legs */}
+        <rect x="42" y="66" width="6" height="6" rx="1" fill="#c77590" />
+        <rect x="72" y="66" width="6" height="6" rx="1" fill="#c77590" />
+
+        {/* Coin slot on top */}
+        <rect x="52" y="36" width="16" height="3" rx="1.5" fill="#1a365d" />
+
+        {/* Curly tail */}
+        <path d="M 32 52 Q 28 50 30 46 Q 32 44 34 46" fill="none" stroke="#c77590" strokeWidth="2" strokeLinecap="round" />
       </g>
-      <g className="anim-coin-drop-3">
-        <circle cx="78" cy="18" r="6.5" fill="#d4a843" stroke="#b8912e" strokeWidth="1.3" />
-        <text x="78" y="22" textAnchor="middle" fontSize="9" fontWeight="900" fill="#1a365d">₪</text>
-      </g>
-      <g className="anim-stack-rise">
-        <ellipse cx="60" cy="64" rx="32" ry="4.5" fill="#b8912e" opacity="0.25" />
-        <rect x="30" y="56" width="60" height="8" rx="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
-        <rect x="33" y="48" width="54" height="8" rx="4" fill="#e8c46a" stroke="#b8912e" strokeWidth="1.2" />
-        <rect x="36" y="40" width="48" height="8" rx="4" fill="#d4a843" stroke="#b8912e" strokeWidth="1.2" />
+
+      {/* Sparkle on deposit */}
+      <g className="anim-sparkle" transform="translate(60 38)">
+        <path d="M 0 -5 L 0 5 M -5 0 L 5 0" stroke="#d4a843" strokeWidth="1.5" strokeLinecap="round" />
       </g>
     </svg>
   );

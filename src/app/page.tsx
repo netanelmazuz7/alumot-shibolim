@@ -189,11 +189,11 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group">
+            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group text-center">
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 1
               </div>
-              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6 text-gold-dark">
+              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6 mx-auto text-gold-dark">
                 <JoinAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
@@ -206,11 +206,11 @@ export default function Home() {
             </div>
 
             {/* Step 2 */}
-            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group">
+            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group text-center">
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 2
               </div>
-              <div className="w-20 h-20 rounded-2xl bg-green/10 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 rounded-2xl bg-green/10 flex items-center justify-center mb-6 mx-auto">
                 <ProtectedTogetherAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
@@ -223,11 +223,11 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group">
+            <div className="relative bg-white rounded-3xl p-8 shadow-lg border border-wheat-dark/10 hover:shadow-xl transition-shadow group text-center">
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg">
                 3
               </div>
-              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mb-6 mx-auto">
                 <SavingTogetherAnimation />
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">
