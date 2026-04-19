@@ -16,6 +16,9 @@ import {
   StickyNote,
   Save,
   Loader2,
+  Download,
+  ArrowUpDown,
+  Calendar,
 } from "lucide-react";
 
 type CustomerStatus = "pending" | "approved" | "rejected";
@@ -36,6 +39,13 @@ type Customer = {
 };
 
 type Filter = "all" | "pending" | "approved" | "rejected";
+type DateRange = "all" | "today" | "week" | "month" | "year";
+type SortKey =
+  | "newest"
+  | "oldest"
+  | "score-high"
+  | "score-low"
+  | "name-az";
 
 export default function AdminPage() {
   const [authChecked, setAuthChecked] = useState(false);
@@ -48,6 +58,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<Filter>("pending");
   const [search, setSearch] = useState("");
+  const [dateRange, setDateRange] = useState<DateRange>("all");
+  const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [selected, setSelected] = useState<Customer | null>(null);
   const [approvalResult, setApprovalResult] = useState<{
     fullName: string;
@@ -215,18 +227,102 @@ export default function AdminPage() {
     );
   }
 
-  const filtered = customers.filter((c) => {
-    if (filter !== "all" && c.status !== filter) return false;
-    if (search) {
-      const q = search.toLowerCase();
-      return (
-        c.fullName.toLowerCase().includes(q) ||
-        c.email.toLowerCase().includes(q) ||
-        (c.phone || "").includes(q)
-      );
-    }
-    return true;
-  });
+  // חישוב ספים לטווחי תאריכים
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const rangeThresholds: Record<DateRange, number> = {
+    all: 0,
+    today: now - dayMs,
+    week: now - 7 * dayMs,
+    month: now - 30 * dayMs,
+    year: now - 365 * dayMs,
+  };
+  const threshold = rangeThresholds[dateRange];
+
+  const filtered = customers
+    .filter((c) => {
+      if (filter !== "all" && c.status !== filter) return false;
+      if (threshold > 0 && c.createdAt < threshold) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        return (
+          c.fullName.toLowerCase().includes(q) ||
+          c.email.toLowerCase().includes(q) ||
+          (c.phone || "").includes(q)
+        );
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sortKey) {
+        case "newest":
+          return b.createdAt - a.createdAt;
+        case "oldest":
+          return a.createdAt - b.createdAt;
+        case "score-high":
+          return (b.score ?? -1) - (a.score ?? -1);
+        case "score-low":
+          return (a.score ?? 999) - (b.score ?? 999);
+        case "name-az":
+          return a.fullName.localeCompare(b.fullName, "he");
+      }
+    });
+
+  function exportToCsv() {
+    const headers = [
+      "שם מלא",
+      "מייל",
+      "טלפון",
+      "סטטוס",
+      "ציון",
+      "תאריך הרשמה",
+      "תאריך אישור",
+      "תאריך דחייה",
+      "סיבת דחייה",
+      "הערות מנהל",
+    ];
+    const statusLabels: Record<CustomerStatus, string> = {
+      pending: "ממתין",
+      approved: "אושר",
+      rejected: "נדחה",
+    };
+    const fmt = (ms?: number) =>
+      ms ? new Date(ms).toLocaleString("he-IL") : "";
+    const escapeCsv = (v: string) => {
+      if (v.includes(",") || v.includes('"') || v.includes("\n")) {
+        return `"${v.replace(/"/g, '""')}"`;
+      }
+      return v;
+    };
+    const rows = filtered.map((c) =>
+      [
+        c.fullName,
+        c.email,
+        c.phone || "",
+        statusLabels[c.status],
+        c.score !== undefined ? String(c.score) : "",
+        fmt(c.createdAt),
+        fmt(c.approvedAt),
+        fmt(c.rejectedAt),
+        c.rejectionReason || "",
+        c.adminNotes || "",
+      ]
+        .map(escapeCsv)
+        .join(",")
+    );
+    // BOM כדי שאקסל יזהה UTF-8 עם עברית
+    const csv = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const dateStr = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `alumat-shibolim-${filter}-${dateStr}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   const counts = {
     pending: customers.filter((c) => c.status === "pending").length,
@@ -296,7 +392,7 @@ export default function AdminPage() {
               color="primary"
             />
           </div>
-          <div className="relative">
+          <div className="relative mb-3">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/40" />
             <input
               type="text"
@@ -305,6 +401,49 @@ export default function AdminPage() {
               placeholder="חיפוש לפי שם, מייל או טלפון..."
               className="w-full pr-11 pl-4 py-2.5 bg-wheat-light border border-wheat-dark/20 rounded-xl text-primary focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold text-sm"
             />
+          </div>
+
+          {/* שורת כלים: טווח תאריכים, מיון, ייצוא */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-wheat-light/70 rounded-lg pr-2 pl-1 py-0.5">
+              <Calendar className="w-4 h-4 text-primary/50" />
+              <select
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value as DateRange)}
+                className="bg-transparent text-sm font-bold text-primary py-1.5 focus:outline-none cursor-pointer"
+              >
+                <option value="all">כל התאריכים</option>
+                <option value="today">היום</option>
+                <option value="week">7 ימים אחרונים</option>
+                <option value="month">30 ימים אחרונים</option>
+                <option value="year">שנה אחרונה</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-wheat-light/70 rounded-lg pr-2 pl-1 py-0.5">
+              <ArrowUpDown className="w-4 h-4 text-primary/50" />
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as SortKey)}
+                className="bg-transparent text-sm font-bold text-primary py-1.5 focus:outline-none cursor-pointer"
+              >
+                <option value="newest">חדשים קודם</option>
+                <option value="oldest">ישנים קודם</option>
+                <option value="score-high">ציון: גבוה → נמוך</option>
+                <option value="score-low">ציון: נמוך → גבוה</option>
+                <option value="name-az">שם: א׳ → ת׳</option>
+              </select>
+            </div>
+
+            <button
+              onClick={exportToCsv}
+              disabled={filtered.length === 0}
+              className="mr-auto flex items-center gap-1.5 px-3 py-2 bg-green hover:bg-green-dark text-white text-sm font-bold rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              title="ייצא את הרשימה המסוננת לקובץ CSV (נפתח באקסל)"
+            >
+              <Download className="w-4 h-4" />
+              ייצא ל-CSV ({filtered.length})
+            </button>
           </div>
         </div>
 
