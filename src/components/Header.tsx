@@ -36,6 +36,12 @@ export default function Header() {
               איך זה עובד
             </Link>
             <Link
+              href="/requirements"
+              className="text-primary/70 hover:text-primary font-medium transition-colors"
+            >
+              תנאי הצטרפות
+            </Link>
+            <Link
               href="/about"
               className="text-primary/70 hover:text-primary font-medium transition-colors"
             >
@@ -52,12 +58,6 @@ export default function Header() {
               className="text-primary/70 hover:text-primary font-medium transition-colors"
             >
               שאלות נפוצות
-            </Link>
-            <Link
-              href="/contact"
-              className="text-primary/70 hover:text-primary font-medium transition-colors"
-            >
-              צרו קשר
             </Link>
           </nav>
 
@@ -107,6 +107,13 @@ export default function Header() {
               className="text-primary font-medium py-2"
             >
               איך זה עובד
+            </Link>
+            <Link
+              href="/requirements"
+              onClick={() => setMobileOpen(false)}
+              className="text-primary font-medium py-2"
+            >
+              תנאי הצטרפות
             </Link>
             <Link
               href="/about"

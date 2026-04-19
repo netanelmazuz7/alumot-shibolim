@@ -429,6 +429,29 @@ export default function JoinPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Insurance requirement banner */}
+        <div className="mb-8 bg-amber-50 border-2 border-amber-300 rounded-2xl p-5">
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-black text-primary mb-1">
+                דרישת סף: ביטוח חובה וצד ג׳
+              </p>
+              <p className="text-primary/70 leading-relaxed">
+                כל חבר בקהילת אלומת שיבולים מחויב להחזיק בביטוח חובה וביטוח
+                צד שלישי תקפים בחברת ביטוח מורשית בישראל. הקהילה משלימה את
+                הביטוח שלך - היא לא באה במקומו.{" "}
+                <Link
+                  href="/requirements"
+                  className="font-bold text-gold-dark hover:underline"
+                >
+                  לפרטים המלאים ←
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Progress */}
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">

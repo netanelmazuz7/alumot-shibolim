@@ -36,6 +36,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/requirements" className="text-white/60 hover:text-white transition-colors">
+                  תנאי הצטרפות
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className="text-white/60 hover:text-white transition-colors">
                   בלוג
                 </Link>
