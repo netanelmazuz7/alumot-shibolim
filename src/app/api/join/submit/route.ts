@@ -132,6 +132,90 @@ function sanitizeFilename(name: string) {
   return name.replace(/[^\w.\-א-ת ]+/g, "_").slice(0, 120);
 }
 
+/**
+ * מייל אישור קבלה אוטומטי ללקוח.
+ * נשלח מיד לאחר הגשת הטופס למי שעבר את הסינון (score >= 90).
+ */
+function renderCustomerConfirmationHtml(
+  fullName: string,
+  email: string,
+  score: number
+) {
+  const firstName = fullName.split(" ")[0] || "חבר/ה יקר/ה";
+  return `
+  <!DOCTYPE html>
+  <html dir="rtl" lang="he">
+  <head><meta charset="utf-8"/><title>תודה על ההרשמה - אלומת שיבולים</title></head>
+  <body style="font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:0;background:#faf6ed">
+    <div style="max-width:600px;margin:0 auto;padding:24px">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#d4a843,#b8912e);padding:32px 24px;border-radius:16px 16px 0 0;text-align:center">
+        <div style="font-size:48px;margin-bottom:8px">🌾</div>
+        <h1 style="color:white;margin:0;font-size:28px;font-weight:900">תודה על ההרשמה!</h1>
+        <p style="color:rgba(255,255,255,0.95);margin:12px 0 0 0;font-size:16px">
+          קיבלנו את הפרטים שלך בהצלחה
+        </p>
+      </div>
+
+      <!-- Body -->
+      <div style="background:white;padding:32px 24px;border-radius:0 0 16px 16px;border:1px solid #e5d9b8">
+        <p style="color:#1a365d;font-size:18px;margin:0 0 16px 0">
+          שלום <strong>${escapeHtml(firstName)}</strong>,
+        </p>
+        <p style="color:#4a5568;line-height:1.7;margin:0 0 20px 0">
+          תודה שהצטרפת למשפחת <strong style="color:#1a365d">אלומת שיבולים</strong>.
+          עברת את הסינון האוטומטי שלנו עם ציון <strong style="color:#2d8a4e">${score}/100</strong> —
+          ועכשיו הבקשה שלך עוברת לבדיקה ידנית של הצוות.
+        </p>
+
+        <!-- Timeline -->
+        <div style="background:#faf6ed;border-radius:12px;padding:20px;margin:24px 0">
+          <h2 style="color:#1a365d;font-size:18px;margin:0 0 16px 0;font-weight:bold">
+            ⏱️ מה קורה עכשיו?
+          </h2>
+          <div style="display:block;margin-bottom:12px">
+            <span style="display:inline-block;background:#2d8a4e;color:white;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:bold;margin-left:10px">1</span>
+            <span style="color:#1a365d;font-weight:bold">הבקשה התקבלה ✅</span>
+          </div>
+          <div style="display:block;margin-bottom:12px">
+            <span style="display:inline-block;background:#d4a843;color:white;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:bold;margin-left:10px">2</span>
+            <span style="color:#1a365d;font-weight:bold">בדיקת הצוות — תוך 2-3 ימי עסקים</span>
+          </div>
+          <div style="display:block">
+            <span style="display:inline-block;background:#cbd5e0;color:white;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:bold;margin-left:10px">3</span>
+            <span style="color:#1a365d;font-weight:bold">מייל עם ההחלטה + פרטי כניסה לאזור האישי</span>
+          </div>
+        </div>
+
+        <p style="color:#4a5568;line-height:1.7;margin:0 0 16px 0">
+          בינתיים, אתה מוזמן לקרוא עוד על הקהילה ועל אופן הפעולה באתר שלנו.
+        </p>
+
+        <div style="text-align:center;margin:28px 0 16px 0">
+          <a href="${process.env.NEXT_PUBLIC_BASE_URL || "https://alumat-shibolim.co.il"}"
+             style="display:inline-block;background:linear-gradient(135deg,#d4a843,#b8912e);color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px">
+            בקר באתר
+          </a>
+        </div>
+
+        <div style="border-top:1px solid #e5d9b8;padding-top:20px;margin-top:24px">
+          <p style="color:#718096;font-size:13px;margin:0;line-height:1.6">
+            יש שאלה? ענה למייל הזה או פנה אלינו דרך
+            <a href="${process.env.NEXT_PUBLIC_BASE_URL || "https://alumat-shibolim.co.il"}/contact" style="color:#d4a843">דף יצירת הקשר</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align:center;padding:20px 24px;color:#718096;font-size:12px">
+        <p style="margin:0 0 8px 0">🌾 אלומת שיבולים — קהילה של אנשים שסומכים אחד על השני</p>
+        <p style="margin:0">הודעה זו נשלחה אוטומטית אל ${escapeHtml(email)}</p>
+      </div>
+    </div>
+  </body>
+  </html>`;
+}
+
 export async function POST(req: Request) {
   try {
     const contentType = req.headers.get("content-type") || "";
@@ -279,6 +363,37 @@ export async function POST(req: Request) {
         { ok: false, error: error.message },
         { status: 500 }
       );
+    }
+
+    // מייל אישור אוטומטי ללקוח - רק אם התקבל ויש מייל תקין.
+    // אם Resend נכשל (למשל לפני אימות דומיין) - לא שובר את התגובה למשתמש.
+    if (accepted && email && score !== undefined) {
+      try {
+        const customerHtml = renderCustomerConfirmationHtml(
+          fullName || email,
+          email,
+          score
+        );
+        const { error: customerMailError } = await resend.emails.send({
+          from,
+          to: [email],
+          subject: "🌾 תודה על ההרשמה - אלומת שיבולים",
+          html: customerHtml,
+        });
+        if (customerMailError) {
+          console.warn(
+            "[join/submit] Customer confirmation email failed (non-fatal):",
+            customerMailError.message
+          );
+        } else {
+          console.log("[join/submit] Customer confirmation email sent to", email);
+        }
+      } catch (e) {
+        console.warn(
+          "[join/submit] Customer confirmation email threw (non-fatal):",
+          e
+        );
+      }
     }
 
     return NextResponse.json({

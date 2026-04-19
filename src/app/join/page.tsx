@@ -17,6 +17,11 @@ import {
   Lock,
   AlertCircle,
   XCircle,
+  Mail,
+  Clock,
+  HelpCircle,
+  BookOpen,
+  MessageCircle,
 } from "lucide-react";
 import WheatLogo from "@/components/WheatLogo";
 import DatePicker from "@/components/DatePicker";
@@ -237,10 +242,7 @@ export default function JoinPage() {
       if (!form.phone.trim()) errs.push("טלפון");
       else if (!form.phoneVerified) errs.push("אימות טלפון (קוד SMS)");
       if (!form.email.trim()) errs.push('דוא"ל');
-      // הערה: דרישת אימות המייל מושבתת זמנית לשלב הביקורת
-      // עקב מגבלת Resend חינמי (שליחה רק לכתובת בעלת החשבון).
-      // להחזיר אחרי אימות דומיין ב-Resend:
-      // else if (!form.emailVerified) errs.push("אימות מייל (קוד)");
+      else if (!form.emailVerified) errs.push("אימות מייל (קוד)");
       if (!form.maritalStatus) errs.push("מצב משפחתי");
       if (!form.hasCriminalRecord) errs.push("שאלת עבר פלילי");
     }
@@ -346,29 +348,150 @@ export default function JoinPage() {
 
   if (submitted && result) {
     const { score, accepted, disqualified, reasons } = result;
+    if (accepted) {
+      return (
+        <div className="min-h-screen bg-cream py-8 px-4">
+          <div className="max-w-2xl mx-auto">
+            {/* Header card */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center mb-6">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green/20 to-green/5 flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <CheckCircle className="w-16 h-16 text-green" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-primary mb-3">
+                תודה על ההרשמה! 🌾
+              </h1>
+              <p className="text-lg text-primary/70 mb-5">
+                שלום <strong className="text-primary">{formData.fullName.split(" ")[0] || "חבר/ה יקר/ה"}</strong>, קיבלנו את הבקשה שלך בהצלחה
+              </p>
+              <div className="inline-flex items-center gap-2 bg-green/10 border-2 border-green/30 rounded-full px-5 py-2">
+                <CheckCircle className="w-4 h-4 text-green" />
+                <span className="font-bold text-green">
+                  ניקוד: {score}/100 — עברת את הסינון!
+                </span>
+              </div>
+            </div>
+
+            {/* Email confirmation */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
+                <Mail className="w-6 h-6 text-gold-dark" />
+              </div>
+              <div className="flex-1 text-right">
+                <p className="font-bold text-primary mb-1">נשלח אליך מייל</p>
+                <p className="text-sm text-primary/60 leading-relaxed">
+                  המענה של הצוות יגיע לכתובת:
+                </p>
+                <p className="text-primary font-mono text-sm mt-1 break-all" dir="ltr">
+                  {formData.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Timeline — what happens next */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
+              <h2 className="text-xl font-black text-primary mb-5 text-right flex items-center gap-2 justify-end">
+                מה קורה עכשיו?
+                <Clock className="w-5 h-5 text-gold-dark" />
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-green/10 border-2 border-green/30 flex items-center justify-center shrink-0 text-green font-black">
+                    1
+                  </div>
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-primary">הבקשה התקבלה ✅</p>
+                    <p className="text-sm text-primary/60">הפרטים שלך במערכת והסינון האוטומטי הצליח</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center shrink-0 text-gold-dark font-black">
+                    2
+                  </div>
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-primary">בדיקה של הצוות</p>
+                    <p className="text-sm text-primary/60">תוך <strong>2-3 ימי עסקים</strong>, צוות אלומת שיבולים יעבור על הבקשה שלך ידנית</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-wheat/30 border-2 border-wheat-dark/30 flex items-center justify-center shrink-0 text-primary font-black">
+                    3
+                  </div>
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-primary">מייל עם החלטה + פרטי כניסה</p>
+                    <p className="text-sm text-primary/60">אם תאושר/י, תקבל/י מייל עם סיסמה לכניסה לאזור האישי שלך באתר</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* In the meantime */}
+            <div className="bg-gradient-to-l from-primary to-primary-dark rounded-2xl shadow-lg p-6 md:p-8 mb-6 text-white">
+              <h2 className="text-xl font-black mb-4 text-right flex items-center gap-2 justify-end">
+                בינתיים, אפשר להכיר אותנו טוב יותר
+                <BookOpen className="w-5 h-5 text-gold" />
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <Link
+                  href="/how-it-works"
+                  className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors group"
+                >
+                  <Info className="w-5 h-5 text-gold shrink-0" />
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-sm">איך זה עובד</p>
+                    <p className="text-xs text-white/70">המודל הקהילתי שלנו</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/faq"
+                  className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors group"
+                >
+                  <HelpCircle className="w-5 h-5 text-gold shrink-0" />
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-sm">שאלות נפוצות</p>
+                    <p className="text-xs text-white/70">תשובות על הכל</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/community"
+                  className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors group"
+                >
+                  <User className="w-5 h-5 text-gold shrink-0" />
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-sm">הקהילה שלנו</p>
+                    <p className="text-xs text-white/70">מי אנחנו</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/contact"
+                  className="flex items-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-colors group"
+                >
+                  <MessageCircle className="w-5 h-5 text-gold shrink-0" />
+                  <div className="flex-1 text-right">
+                    <p className="font-bold text-sm">יש שאלה?</p>
+                    <p className="text-xs text-white/70">פנייה לצוות</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* Home button */}
+            <div className="text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-l from-gold to-gold-dark text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-shadow"
+              >
+                חזרה לדף הבית
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-10 md:p-12 max-w-xl w-full text-center">
-          {accepted ? (
-            <>
-              <div className="w-24 h-24 rounded-full bg-green/10 flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-16 h-16 text-green" />
-              </div>
-              <h1 className="text-4xl font-black text-primary mb-3">
-                ברוכים הבאים לקהילה! 🌾
-              </h1>
-              <div className="inline-flex items-center gap-2 bg-green/10 border-2 border-green/30 rounded-full px-5 py-2 mb-5">
-                <span className="font-bold text-green">
-                  ניקוד שלכם: {score}/100
-                </span>
-              </div>
-              <p className="text-primary/60 leading-relaxed mb-6">
-                מזל טוב! עברתם את תהליך הסינון הקפדני שלנו. חבר/ה מהצוות יצור
-                איתכם קשר תוך <strong className="text-primary">48 שעות</strong>{" "}
-                להשלמת תהליך ההצטרפות.
-              </p>
-            </>
-          ) : disqualified ? (
+          {disqualified ? (
             <>
               <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
                 <XCircle className="w-16 h-16 text-danger" />
@@ -596,18 +719,16 @@ export default function JoinPage() {
                   onVerifiedChange={(v) => set("phoneVerified", v)}
                   placeholder="050-0000000"
                 />
-                <div>
-                  <label className="block text-sm font-bold text-primary mb-1.5">
-                    דוא&quot;ל <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => set("email", e.target.value)}
-                    placeholder="name@email.com"
-                    className="w-full px-4 py-3 bg-wheat-light border-2 border-wheat-dark/30 rounded-xl text-primary placeholder:text-primary/25 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-colors"
-                  />
-                </div>
+                <VerifiedInput
+                  type="email"
+                  label="דוא&quot;ל"
+                  required
+                  value={form.email}
+                  onChange={(v) => set("email", v)}
+                  verified={form.emailVerified}
+                  onVerifiedChange={(v) => set("emailVerified", v)}
+                  placeholder="name@email.com"
+                />
                 <SelectField
                   label="מצב משפחתי"
                   required
