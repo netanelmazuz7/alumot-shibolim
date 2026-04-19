@@ -281,7 +281,7 @@ export default function FAQSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="mailto:info@alumot-shibolim.co.il"
+              href="mailto:info@alumat-shibolim.co.il"
               className="px-6 py-3 bg-gradient-to-l from-gold to-gold-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-shadow"
             >
               שלחו לנו מייל

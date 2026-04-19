@@ -108,10 +108,10 @@ export default function AccessibilityStatementPage() {
                 <li>
                   <strong>דוא&ldquo;ל:</strong>{" "}
                   <a
-                    href="mailto:accessibility@alumot-shibolim.co.il"
+                    href="mailto:accessibility@alumat-shibolim.co.il"
                     className="text-gold-dark font-bold underline"
                   >
-                    accessibility@alumot-shibolim.co.il
+                    accessibility@alumat-shibolim.co.il
                   </a>
                 </li>
                 <li>

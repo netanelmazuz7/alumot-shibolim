@@ -28,8 +28,8 @@ export default function VerifiedInput({
   const [otp, setOtp] = useState("");
   const [sending, setSending] = useState(false);
   const [verifying, setVerifying] = useState(false);
-  const [sentCode, setSentCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [devMode, setDevMode] = useState(false);
 
   const Icon = type === "email" ? Mail : Phone;
 
@@ -41,25 +41,45 @@ export default function VerifiedInput({
   const handleSend = async () => {
     setError(null);
     setSending(true);
-    // Simulate sending - in production, call backend API
-    await new Promise((r) => setTimeout(r, 900));
-    // Generate 6-digit code (for demo, always use 123456)
-    const code = "123456";
-    setSentCode(code);
+    try {
+      const res = await fetch("/api/verify/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, value }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        setError(data.error || "שגיאה בשליחת הקוד");
+        setSending(false);
+        return;
+      }
+      setDevMode(Boolean(data.dev));
+      setOtpOpen(true);
+    } catch {
+      setError("תקשורת נכשלה - נסה שוב");
+    }
     setSending(false);
-    setOtpOpen(true);
   };
 
   const handleVerify = async () => {
     setError(null);
     setVerifying(true);
-    await new Promise((r) => setTimeout(r, 600));
-    if (otp === sentCode) {
-      onVerifiedChange(true);
-      setOtpOpen(false);
-      setOtp("");
-    } else {
-      setError("קוד שגוי - נסה שוב");
+    try {
+      const res = await fetch("/api/verify/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, value, code: otp }),
+      });
+      const data = await res.json();
+      if (data.ok && data.verified) {
+        onVerifiedChange(true);
+        setOtpOpen(false);
+        setOtp("");
+      } else {
+        setError(data.error || "קוד שגוי - נסה שוב");
+      }
+    } catch {
+      setError("תקשורת נכשלה - נסה שוב");
     }
     setVerifying(false);
   };
@@ -69,7 +89,7 @@ export default function VerifiedInput({
     if (verified) onVerifiedChange(false);
     setOtpOpen(false);
     setOtp("");
-    setSentCode(null);
+    setDevMode(false);
   };
 
   return (
@@ -137,9 +157,14 @@ export default function VerifiedInput({
               <X className="w-4 h-4" />
             </button>
           </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3 text-xs text-blue-700">
-            <strong>מצב דמו:</strong> הקוד הוא <code className="bg-blue-100 px-1.5 py-0.5 rounded font-bold">123456</code>
-          </div>
+          {devMode && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3 text-xs text-blue-700">
+              <strong>מצב פיתוח:</strong> הקוד הוא{" "}
+              <code className="bg-blue-100 px-1.5 py-0.5 rounded font-bold">
+                123456
+              </code>
+            </div>
+          )}
           <div className="flex gap-2">
             <input
               type="text"

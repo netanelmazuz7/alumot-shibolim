@@ -237,7 +237,10 @@ export default function JoinPage() {
       if (!form.phone.trim()) errs.push("טלפון");
       else if (!form.phoneVerified) errs.push("אימות טלפון (קוד SMS)");
       if (!form.email.trim()) errs.push('דוא"ל');
-      else if (!form.emailVerified) errs.push("אימות מייל (קוד)");
+      // הערה: דרישת אימות המייל מושבתת זמנית לשלב הביקורת
+      // עקב מגבלת Resend חינמי (שליחה רק לכתובת בעלת החשבון).
+      // להחזיר אחרי אימות דומיין ב-Resend:
+      // else if (!form.emailVerified) errs.push("אימות מייל (קוד)");
       if (!form.maritalStatus) errs.push("מצב משפחתי");
       if (!form.hasCriminalRecord) errs.push("שאלת עבר פלילי");
     }
@@ -294,7 +297,7 @@ export default function JoinPage() {
     setStep((s) => Math.max(s - 1, 0));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) {
       setShowValidation(true);
       // Scroll to top to make sure user sees the error panel
@@ -306,6 +309,39 @@ export default function JoinPage() {
     const res = calculateScore(form);
     setResult(res);
     setSubmitted(true);
+
+    // שלח את נתוני הטופס + קבצים למייל המנהל (לא חוסם - נבצע ברקע)
+    try {
+      const fd = new FormData();
+
+      // נתוני טקסט - מפרידים מהקבצים
+      const cleanData: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(form)) {
+        if (v instanceof File) continue;
+        if (Array.isArray(v) && v.some((x) => x instanceof File)) continue;
+        cleanData[k] = v;
+      }
+      fd.append("formData", JSON.stringify(cleanData));
+      fd.append("score", String(res.score));
+      fd.append("accepted", String(res.accepted));
+
+      // קבצים בודדים
+      if (form.idFrontFile) fd.append("idFrontFile", form.idFrontFile);
+      if (form.idBackFile) fd.append("idBackFile", form.idBackFile);
+      if (form.selfieFile) fd.append("selfieFile", form.selfieFile);
+
+      // מערך תמונות רכב
+      form.carPhotos.forEach((f, i) => {
+        if (f) fd.append(`carPhoto_${i}`, f);
+      });
+
+      await fetch("/api/join/submit", {
+        method: "POST",
+        body: fd,
+      });
+    } catch (err) {
+      console.error("Failed to submit form data:", err);
+    }
   };
 
   if (submitted && result) {
@@ -398,7 +434,7 @@ export default function JoinPage() {
             </Link>
             {!accepted && (
               <a
-                href="mailto:info@alumot-shibolim.co.il"
+                href="mailto:info@alumat-shibolim.co.il"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-primary border-2 border-primary/20 rounded-xl font-bold hover:border-primary/40 transition-colors"
               >
                 פנייה לצוות
@@ -560,16 +596,18 @@ export default function JoinPage() {
                   onVerifiedChange={(v) => set("phoneVerified", v)}
                   placeholder="050-0000000"
                 />
-                <VerifiedInput
-                  type="email"
-                  label='דוא"ל'
-                  required
-                  value={form.email}
-                  onChange={(v) => set("email", v)}
-                  verified={form.emailVerified}
-                  onVerifiedChange={(v) => set("emailVerified", v)}
-                  placeholder="name@email.com"
-                />
+                <div>
+                  <label className="block text-sm font-bold text-primary mb-1.5">
+                    דוא&quot;ל <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => set("email", e.target.value)}
+                    placeholder="name@email.com"
+                    className="w-full px-4 py-3 bg-wheat-light border-2 border-wheat-dark/30 rounded-xl text-primary placeholder:text-primary/25 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-colors"
+                  />
+                </div>
                 <SelectField
                   label="מצב משפחתי"
                   required

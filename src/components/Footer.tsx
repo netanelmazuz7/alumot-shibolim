@@ -105,7 +105,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2 text-white/60">
                 <Mail className="w-4 h-4 text-gold" />
-                <span>info@alumot-shibolim.co.il</span>
+                <span>info@alumat-shibolim.co.il</span>
               </li>
               <li className="flex items-center gap-2 text-white/60">
                 <MapPin className="w-4 h-4 text-gold" />

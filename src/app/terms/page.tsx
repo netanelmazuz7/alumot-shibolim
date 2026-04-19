@@ -299,10 +299,10 @@ export default function TermsPage() {
                 <li>
                   דוא&ldquo;ל:{" "}
                   <a
-                    href="mailto:legal@alumot-shibolim.co.il"
+                    href="mailto:legal@alumat-shibolim.co.il"
                     className="text-gold-dark font-bold underline"
                   >
-                    legal@alumot-shibolim.co.il
+                    legal@alumat-shibolim.co.il
                   </a>
                 </li>
                 <li>טלפון: 1-800-ALUMOT (03-1234567)</li>

@@ -80,7 +80,7 @@ export default function ContactPage() {
               <h3 className="text-xl font-black text-primary mb-2">
                 דוא״ל
               </h3>
-              <p className="text-primary/70 mb-2">info@alumot-shibolim.co.il</p>
+              <p className="text-primary/70 mb-2">info@alumat-shibolim.co.il</p>
               <p className="text-sm text-primary/50">מענה תוך 24 שעות</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-wheat-dark/10 text-center">

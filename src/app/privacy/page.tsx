@@ -190,10 +190,10 @@ export default function PrivacyPage() {
               <p>
                 מימוש הזכויות:{" "}
                 <a
-                  href="mailto:privacy@alumot-shibolim.co.il"
+                  href="mailto:privacy@alumat-shibolim.co.il"
                   className="text-gold-dark font-bold underline"
                 >
-                  privacy@alumot-shibolim.co.il
+                  privacy@alumat-shibolim.co.il
                 </a>
                 . זמן מענה: עד 30 ימים.
               </p>
@@ -289,10 +289,10 @@ export default function PrivacyPage() {
                 <li>
                   <strong>דוא&ldquo;ל:</strong>{" "}
                   <a
-                    href="mailto:privacy@alumot-shibolim.co.il"
+                    href="mailto:privacy@alumat-shibolim.co.il"
                     className="text-gold-dark font-bold underline"
                   >
-                    privacy@alumot-shibolim.co.il
+                    privacy@alumat-shibolim.co.il
                   </a>
                 </li>
                 <li>

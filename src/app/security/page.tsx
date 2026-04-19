@@ -228,10 +228,10 @@ export default function SecurityPage() {
               אנחנו מתייחסים לכל דיווח ברצינות ומטפלים בו במהירות.
             </p>
             <a
-              href="mailto:security@alumot-shibolim.co.il"
+              href="mailto:security@alumat-shibolim.co.il"
               className="inline-flex items-center gap-2 bg-gold text-primary font-black px-6 py-3 rounded-xl hover:scale-105 transition-all"
             >
-              security@alumot-shibolim.co.il
+              security@alumat-shibolim.co.il
             </a>
           </div>
         </div>
