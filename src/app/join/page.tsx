@@ -361,7 +361,7 @@ export default function JoinPage() {
                 תודה על ההרשמה! 🌾
               </h1>
               <p className="text-lg text-primary/70 mb-5">
-                שלום <strong className="text-primary">{formData.fullName.split(" ")[0] || "חבר/ה יקר/ה"}</strong>, קיבלנו את הבקשה שלך בהצלחה
+                שלום <strong className="text-primary">{form.fullName.split(" ")[0] || "חבר/ה יקר/ה"}</strong>, קיבלנו את הבקשה שלך בהצלחה
               </p>
               <div className="inline-flex items-center gap-2 bg-green/10 border-2 border-green/30 rounded-full px-5 py-2">
                 <CheckCircle className="w-4 h-4 text-green" />
@@ -382,7 +382,7 @@ export default function JoinPage() {
                   המענה של הצוות יגיע לכתובת:
                 </p>
                 <p className="text-primary font-mono text-sm mt-1 break-all" dir="ltr">
-                  {formData.email}
+                  {form.email}
                 </p>
               </div>
             </div>
