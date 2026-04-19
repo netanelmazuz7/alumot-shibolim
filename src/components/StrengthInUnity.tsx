@@ -25,7 +25,7 @@ export default function StrengthInUnity() {
         <div className="mb-12 rounded-3xl overflow-hidden shadow-2xl border-2 border-wheat-dark/20">
           <div className="relative w-full aspect-[16/9]">
             <Image
-              src="/aluma.png"
+              src="/about.png"
               alt="אלומת שיבולים - יחד אנחנו חזקים"
               fill
               priority
