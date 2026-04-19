@@ -17,6 +17,8 @@ import {
   FileText,
   Sparkles,
   XCircle,
+  Users,
+  Bell,
 } from "lucide-react";
 import WheatLogo from "@/components/WheatLogo";
 
@@ -188,6 +190,27 @@ function ApprovedView({
     ? new Date(customer.approvedAt).toLocaleDateString("he-IL")
     : "—";
 
+  const [communityStats, setCommunityStats] = useState<{
+    approvedCount: number;
+    activeClaims: number;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/community/stats")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.ok) {
+          setCommunityStats({
+            approvedCount: d.approvedCount ?? 0,
+            activeClaims: d.activeClaims ?? 0,
+          });
+        }
+      })
+      .catch(() => {
+        // השתקה - לא קריטי
+      });
+  }, []);
+
   const car = {
     plate: (f.licensePlate as string) || "—",
     manufacturer: (f.manufacturer as string) || "—",
@@ -336,6 +359,47 @@ function ApprovedView({
                 label="שווי שוק"
                 value={car.marketValue !== "—" ? `₪${car.marketValue}` : "—"}
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Community status */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-9 h-9 rounded-lg bg-green/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-green" />
+            </div>
+            <h2 className="font-black text-primary text-lg">מצב הקהילה</h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+            <div className="bg-wheat-light/40 rounded-xl p-4 text-center">
+              <div className="text-primary/60 text-xs mb-1">חברים מאושרים</div>
+              <div className="font-black text-primary text-3xl mb-1">
+                {communityStats ? communityStats.approvedCount : "—"}
+              </div>
+              <div className="text-primary/50 text-xs">ברוכים הבאים לקהילה 🌾</div>
+            </div>
+
+            <div className="bg-green/5 rounded-xl p-4 text-center">
+              <div className="text-primary/60 text-xs mb-1">תביעות פעילות</div>
+              <div className="font-black text-green text-3xl mb-1">
+                {communityStats ? communityStats.activeClaims : "—"}
+              </div>
+              <div className="text-primary/50 text-xs">
+                {communityStats && communityStats.activeClaims === 0
+                  ? "אין תביעות פעילות כרגע"
+                  : "תביעות בטיפול"}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 bg-primary/5 rounded-xl p-4">
+            <Bell className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <div className="text-primary/80 text-sm leading-relaxed">
+              <strong className="font-black">התראות אוטומטיות:</strong>{" "}
+              תקבל מייל על כל אירוע קהילתי - תביעה חדשה, חבר חדש שמצטרף, או
+              עדכון חשוב. אין צורך להיכנס לכאן כל יום.
             </div>
           </div>
         </div>
