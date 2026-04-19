@@ -35,9 +35,9 @@ export async function POST(req: Request) {
     const resendKey = process.env.RESEND_API_KEY;
     const from =
       process.env.RESEND_FROM ||
-      "Alumat Shibolim <onboarding@resend.dev>";
+      "Alumat Shibolim <noreply@alumat-shibolim.co.il>";
     const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+      process.env.NEXT_PUBLIC_BASE_URL || "https://alumat-shibolim.co.il";
     const loginUrl = `${baseUrl}/login`;
 
     let emailSent = false;

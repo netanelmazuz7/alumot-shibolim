@@ -61,7 +61,8 @@ export async function POST(req: Request) {
 
     const resend = new Resend(resendKey);
     const from =
-      process.env.RESEND_FROM || "Alumat Shibolim <onboarding@resend.dev>";
+      process.env.RESEND_FROM ||
+      "Alumat Shibolim <noreply@alumat-shibolim.co.il>";
 
     const { error } = await resend.emails.send({
       from,

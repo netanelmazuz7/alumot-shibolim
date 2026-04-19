@@ -322,7 +322,8 @@ export async function POST(req: Request) {
     const resendKey = process.env.RESEND_API_KEY;
     const to = process.env.ADMIN_EMAIL || "netanelmazuz7@gmail.com";
     const from =
-      process.env.RESEND_FROM || "Alumat Shibolim <onboarding@resend.dev>";
+      process.env.RESEND_FROM ||
+      "Alumat Shibolim <noreply@alumat-shibolim.co.il>";
 
     const attachmentsSummary =
       attachments.length > 0

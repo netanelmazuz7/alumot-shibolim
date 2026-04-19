@@ -10,10 +10,22 @@ const heebo = Heebo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://alumat-shibolim.co.il"
+  ),
   title: "אלומת שיבולים | הגנה הדדית לרכב שלך",
   description:
     "קהילת הגנה הדדית לרכבים בישראל. חיסכון של אלפי שקלים בשנה על ההגנה המקיפה לרכב - ללא מתווכים מסורתיים.",
   keywords: "הגנה הדדית לרכב, קהילת רכב, P2P, חיסכון, אלומת שיבולים, ישראל",
+  openGraph: {
+    title: "אלומת שיבולים | הגנה הדדית לרכב שלך",
+    description:
+      "קהילת הגנה הדדית לרכבים בישראל. חיסכון של אלפי שקלים בשנה - ללא מתווכים.",
+    url: "/",
+    siteName: "אלומת שיבולים",
+    locale: "he_IL",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
