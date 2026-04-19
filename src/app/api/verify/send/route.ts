@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import twilio from "twilio";
 import { Resend } from "resend";
 import { saveCode, generateCode } from "@/lib/emailOtpStore";
+import { rateLimit, getClientIp, rateLimitExceeded } from "@/lib/rateLimit";
 
 /**
  * שולח קוד אימות OTP.
@@ -10,6 +11,17 @@ import { saveCode, generateCode } from "@/lib/emailOtpStore";
  */
 export async function POST(req: Request) {
   try {
+    // הגבלת קצב: 3 בקשות ל-10 דקות לפי IP.
+    // SMS עולה כסף - חיוני לחסום בוטים.
+    const ip = getClientIp(req);
+    const rl = rateLimit(`verify-send:${ip}`, 3, 10 * 60);
+    if (!rl.ok) {
+      return rateLimitExceeded(
+        rl,
+        "שלחת יותר מדי קודי אימות. נסה שוב בעוד כמה דקות."
+      );
+    }
+
     const { type, value } = (await req.json()) as {
       type: "phone" | "email";
       value: string;

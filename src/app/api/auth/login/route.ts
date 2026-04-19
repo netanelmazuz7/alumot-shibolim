@@ -1,9 +1,20 @@
 import { NextResponse } from "next/server";
 import { setCustomerSession, verifyPassword } from "@/lib/auth";
 import { getCustomerByEmail } from "@/lib/customerStore";
+import { rateLimit, getClientIp, rateLimitExceeded } from "@/lib/rateLimit";
 
 export async function POST(req: Request) {
   try {
+    // הגבלת קצב: 5 ניסיונות ל-15 דקות. מניעת ניחוש סיסמה בכוח.
+    const ip = getClientIp(req);
+    const rl = rateLimit(`auth-login:${ip}`, 5, 15 * 60);
+    if (!rl.ok) {
+      return rateLimitExceeded(
+        rl,
+        "יותר מדי ניסיונות התחברות. נסה שוב בעוד 15 דקות."
+      );
+    }
+
     const { email, password } = (await req.json()) as {
       email: string;
       password: string;

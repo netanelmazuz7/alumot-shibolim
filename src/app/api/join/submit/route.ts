@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createOrUpdateCustomer } from "@/lib/customerStore";
+import { rateLimit, getClientIp, rateLimitExceeded } from "@/lib/rateLimit";
 
 /**
  * שולח את נתוני טופס ההרשמה למייל של המנהל, כולל תמונות כקבצים מצורפים.
@@ -218,6 +219,16 @@ function renderCustomerConfirmationHtml(
 
 export async function POST(req: Request) {
   try {
+    // הגבלת קצב: 3 הרשמות לשעה לפי IP. מניעת ספאם טפסים.
+    const ip = getClientIp(req);
+    const rl = rateLimit(`join-submit:${ip}`, 3, 60 * 60);
+    if (!rl.ok) {
+      return rateLimitExceeded(
+        rl,
+        "שלחת יותר מדי טפסי הרשמה. נסה שוב בעוד שעה."
+      );
+    }
+
     const contentType = req.headers.get("content-type") || "";
 
     let formData: FormDataObj = {};

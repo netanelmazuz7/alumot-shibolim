@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import twilio from "twilio";
 import { verifyCode } from "@/lib/emailOtpStore";
+import { rateLimit, getClientIp, rateLimitExceeded } from "@/lib/rateLimit";
 
 /**
  * מאמת קוד OTP.
@@ -9,6 +10,17 @@ import { verifyCode } from "@/lib/emailOtpStore";
  */
 export async function POST(req: Request) {
   try {
+    // הגבלת קצב: 10 ניסיונות ל-10 דקות לפי IP.
+    // מניעת ניחוש קודים בכוח (brute force).
+    const ip = getClientIp(req);
+    const rl = rateLimit(`verify-check:${ip}`, 10, 10 * 60);
+    if (!rl.ok) {
+      return rateLimitExceeded(
+        rl,
+        "יותר מדי ניסיונות אימות. נסה שוב בעוד כמה דקות."
+      );
+    }
+
     const { type, value, code } = (await req.json()) as {
       type: "phone" | "email";
       value: string;
