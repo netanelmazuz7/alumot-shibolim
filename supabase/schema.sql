@@ -17,10 +17,15 @@ create table if not exists public.customers (
   score integer,
   form_data jsonb not null default '{}'::jsonb,
   rejection_reason text,
+  admin_notes text,
   created_at timestamptz not null default now(),
   approved_at timestamptz,
   rejected_at timestamptz
 );
+
+-- מיגרציה: אם הטבלה כבר קיימת ללא admin_notes, הוסף אותה
+alter table public.customers
+  add column if not exists admin_notes text;
 
 -- אינדקסים לחיפוש מהיר
 create index if not exists customers_status_created_idx

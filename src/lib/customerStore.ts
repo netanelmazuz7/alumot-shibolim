@@ -19,6 +19,7 @@ export type Customer = {
   approvedAt?: number;
   rejectedAt?: number;
   rejectionReason?: string;
+  adminNotes?: string;
   score?: number;
   formData: Record<string, unknown>;
 };
@@ -35,6 +36,7 @@ type DbRow = {
   score: number | null;
   form_data: Record<string, unknown>;
   rejection_reason: string | null;
+  admin_notes: string | null;
   created_at: string;
   approved_at: string | null;
   rejected_at: string | null;
@@ -56,6 +58,7 @@ function rowToCustomer(r: DbRow): Customer {
     score: r.score ?? undefined,
     formData: r.form_data ?? {},
     rejectionReason: r.rejection_reason ?? undefined,
+    adminNotes: r.admin_notes ?? undefined,
     createdAt: new Date(r.created_at).getTime(),
     approvedAt: r.approved_at ? new Date(r.approved_at).getTime() : undefined,
     rejectedAt: r.rejected_at ? new Date(r.rejected_at).getTime() : undefined,
@@ -74,6 +77,7 @@ function updatesToDb(u: Partial<Customer>): Record<string, unknown> {
   if (u.score !== undefined) out.score = u.score;
   if (u.formData !== undefined) out.form_data = u.formData;
   if (u.rejectionReason !== undefined) out.rejection_reason = u.rejectionReason;
+  if (u.adminNotes !== undefined) out.admin_notes = u.adminNotes;
   if (u.approvedAt !== undefined)
     out.approved_at = new Date(u.approvedAt).toISOString();
   if (u.rejectedAt !== undefined)

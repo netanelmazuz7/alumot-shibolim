@@ -13,6 +13,9 @@ import {
   Users,
   Search,
   AlertCircle,
+  StickyNote,
+  Save,
+  Loader2,
 } from "lucide-react";
 
 type CustomerStatus = "pending" | "approved" | "rejected";
@@ -27,6 +30,7 @@ type Customer = {
   approvedAt?: number;
   rejectedAt?: number;
   rejectionReason?: string;
+  adminNotes?: string;
   score?: number;
   formData: Record<string, unknown>;
 };
@@ -342,6 +346,14 @@ export default function AdminPage() {
             setSelected(null);
             handleReject(selected);
           }}
+          onNotesSaved={(notes) => {
+            setSelected({ ...selected, adminNotes: notes });
+            setCustomers((prev) =>
+              prev.map((c) =>
+                c.id === selected.id ? { ...c, adminNotes: notes } : c
+              )
+            );
+          }}
         />
       )}
 
@@ -432,6 +444,15 @@ function CustomerRow({
                 {customer.score}/100
               </span>
             )}
+            {customer.adminNotes && customer.adminNotes.trim() !== "" && (
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold"
+                title={customer.adminNotes}
+              >
+                <StickyNote className="w-3 h-3" />
+                הערה
+              </span>
+            )}
           </div>
           <div className="text-sm text-primary/60 space-y-0.5">
             <div className="truncate" dir="ltr" style={{ textAlign: "right" }}>{customer.email}</div>
@@ -500,15 +521,47 @@ function DetailModal({
   onClose,
   onApprove,
   onReject,
+  onNotesSaved,
 }: {
   customer: Customer;
   onClose: () => void;
   onApprove: () => void;
   onReject: () => void;
+  onNotesSaved: (notes: string) => void;
 }) {
   const entries = Object.entries(customer.formData).filter(
     ([k, v]) => DETAIL_LABELS[k] && v !== "" && v !== null && v !== undefined
   );
+  const [notes, setNotes] = useState(customer.adminNotes ?? "");
+  const [savingNotes, setSavingNotes] = useState(false);
+  const [notesStatus, setNotesStatus] = useState<"idle" | "saved" | "error">(
+    "idle"
+  );
+  const notesChanged = (customer.adminNotes ?? "") !== notes;
+
+  async function saveNotes() {
+    setSavingNotes(true);
+    setNotesStatus("idle");
+    try {
+      const res = await fetch("/api/admin/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: customer.id, notes }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setNotesStatus("saved");
+        onNotesSaved(notes);
+        setTimeout(() => setNotesStatus("idle"), 2000);
+      } else {
+        setNotesStatus("error");
+      }
+    } catch {
+      setNotesStatus("error");
+    } finally {
+      setSavingNotes(false);
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={onClose}>
@@ -553,6 +606,49 @@ function DetailModal({
               <div className="text-primary text-sm">{customer.rejectionReason}</div>
             </div>
           )}
+
+          {/* הערות פנימיות למנהל - לא מוצגות ללקוח */}
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <StickyNote className="w-4 h-4 text-amber-700" />
+                <span className="font-bold text-amber-900 text-sm">
+                  הערות פנימיות
+                </span>
+                <span className="text-xs text-amber-700/70">
+                  (מוצג רק לך)
+                </span>
+              </div>
+              {notesStatus === "saved" && (
+                <span className="text-xs text-green font-bold flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  נשמר
+                </span>
+              )}
+              {notesStatus === "error" && (
+                <span className="text-xs text-danger font-bold">שגיאה</span>
+              )}
+            </div>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="הוסף הערה פנימית על הלקוח... (למשל: 'חבר של X', 'לבדוק שוב ב-1/5', 'התקשר אליי אחר כך')"
+              rows={3}
+              className="w-full bg-white border border-amber-300 rounded-lg p-2.5 text-sm text-primary placeholder:text-primary/30 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-500 resize-y"
+            />
+            <button
+              onClick={saveNotes}
+              disabled={!notesChanged || savingNotes}
+              className="mt-2 inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              {savingNotes ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Save className="w-3.5 h-3.5" />
+              )}
+              {savingNotes ? "שומר..." : "שמור הערה"}
+            </button>
+          </div>
 
           {customer.status === "pending" && (
             <div className="flex gap-2 pt-2">
