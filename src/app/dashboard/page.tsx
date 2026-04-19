@@ -1,551 +1,417 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   User,
   Car,
-  CreditCard,
-  FileText,
-  Bell,
-  LogOut,
-  Plus,
   Calendar,
-  TrendingDown,
+  LogOut,
   CheckCircle,
   Clock,
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Banknote,
-  Users,
-  Menu,
-  X,
-  Home as HomeIcon,
+  Mail,
+  Phone,
+  MapPin,
+  FileText,
+  Sparkles,
+  XCircle,
 } from "lucide-react";
 import WheatLogo from "@/components/WheatLogo";
 
-// Mock data
-const memberData = {
-  name: "ישראל ישראלי",
-  memberSince: "מרץ 2026",
-  score: 87,
-  vehicle: {
-    plate: "12-345-67",
-    make: "טויוטה קורולה",
-    year: 2022,
-    value: 120000,
-  },
-  monthlyFee: 30,
-  avgParticipation: 37,
-  monthlyCap: 150,
-  totalSaved: 3420,
+type CustomerStatus = "pending" | "approved" | "rejected";
+
+type Customer = {
+  id: string;
+  email: string;
+  fullName: string;
+  phone?: string;
+  status: CustomerStatus;
+  createdAt: number;
+  approvedAt?: number;
+  rejectedAt?: number;
+  rejectionReason?: string;
+  score?: number;
+  formData: Record<string, unknown>;
 };
 
-const payments = [
-  { date: "14/04/2026", desc: "דמי ניהול - אפריל", amount: 30, type: "fee" },
-  { date: "10/04/2026", desc: "השתתפות - אירוע #127", amount: 18.5, type: "claim" },
-  { date: "14/03/2026", desc: "דמי ניהול - מרץ", amount: 30, type: "fee" },
-  { date: "22/03/2026", desc: "השתתפות - אירוע #119", amount: 42, type: "claim" },
-  { date: "14/02/2026", desc: "דמי ניהול - פברואר", amount: 30, type: "fee" },
-];
-
-const claims = [
-  { id: "#127", date: "08/04/2026", status: "approved", amount: 4200, member: "יוסי כ.", desc: "נזק שמשה קדמית" },
-  { id: "#119", date: "18/03/2026", status: "approved", amount: 8500, member: "מיכל ל.", desc: "תאונת חניון" },
-  { id: "#112", date: "02/02/2026", status: "approved", amount: 3100, member: "אבי מ.", desc: "שריטה דלת" },
-];
-
-const tabs = [
-  { id: "overview", label: "סקירה", icon: Eye },
-  { id: "payments", label: "תשלומים", icon: CreditCard },
-  { id: "claims", label: "אירועים", icon: FileText },
-  { id: "profile", label: "פרופיל", icon: User },
-];
-
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [customer, setCustomer] = useState<Customer | null>(null);
 
-  const sidebarWidth = sidebarOpen ? "w-64" : "w-20";
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.customer) {
+          router.replace("/login");
+          return;
+        }
+        setCustomer(d.customer);
+        setLoading(false);
+      })
+      .catch(() => {
+        router.replace("/login");
+      });
+  }, [router]);
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/login");
+    router.refresh();
+  }
+
+  if (loading || !customer) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center">
+        <div className="text-primary/50">טוען...</div>
+      </div>
+    );
+  }
+
+  // הרשמה שעדיין ממתינה
+  if (customer.status === "pending") {
+    return (
+      <PendingView customer={customer} onLogout={handleLogout} />
+    );
+  }
+
+  if (customer.status === "rejected") {
+    return (
+      <RejectedView customer={customer} onLogout={handleLogout} />
+    );
+  }
+
+  return <ApprovedView customer={customer} onLogout={handleLogout} />;
+}
+
+// ===== מסך לקוח ממתין (לא אמור להגיע לכאן בדר"כ - login חוסם) =====
+function PendingView({
+  customer,
+  onLogout,
+}: {
+  customer: Customer;
+  onLogout: () => void;
+}) {
+  return (
+    <CenterCard onLogout={onLogout}>
+      <div className="w-20 h-20 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-5">
+        <Clock className="w-11 h-11 text-amber-600" />
+      </div>
+      <h1 className="text-2xl font-black text-primary mb-3">
+        הבקשה שלך בבדיקה
+      </h1>
+      <p className="text-primary/70 mb-5 leading-relaxed">
+        שלום {customer.fullName}, תודה על ההרשמה.
+        <br />
+        אנחנו סוקרים את הבקשה שלך ונחזור אליך במייל בקרוב.
+      </p>
+    </CenterCard>
+  );
+}
+
+// ===== מסך לקוח שנדחה =====
+function RejectedView({
+  customer,
+  onLogout,
+}: {
+  customer: Customer;
+  onLogout: () => void;
+}) {
+  return (
+    <CenterCard onLogout={onLogout}>
+      <div className="w-20 h-20 rounded-full bg-danger/10 flex items-center justify-center mx-auto mb-5">
+        <XCircle className="w-11 h-11 text-danger" />
+      </div>
+      <h1 className="text-2xl font-black text-primary mb-3">
+        הבקשה לא אושרה
+      </h1>
+      <p className="text-primary/70 mb-3 leading-relaxed">
+        שלום {customer.fullName},
+        <br />
+        לצערנו ההרשמה שלך לא עמדה בקריטריונים הנדרשים.
+      </p>
+      {customer.rejectionReason && (
+        <div className="bg-wheat-light rounded-xl p-4 mb-4 text-right">
+          <div className="text-xs text-primary/60 mb-1">הערה:</div>
+          <div className="text-primary text-sm">{customer.rejectionReason}</div>
+        </div>
+      )}
+      <p className="text-primary/60 text-sm">
+        לפרטים נוספים ניתן לפנות אלינו דרך{" "}
+        <Link href="/contact" className="font-bold text-gold hover:underline">
+          דף יצירת הקשר
+        </Link>
+        .
+      </p>
+    </CenterCard>
+  );
+}
+
+function CenterCard({
+  children,
+  onLogout,
+}: {
+  children: React.ReactNode;
+  onLogout: () => void;
+}) {
+  return (
+    <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 text-center">
+          {children}
+          <button
+            onClick={onLogout}
+            className="mt-6 text-primary/50 hover:text-primary text-sm font-bold flex items-center gap-1 mx-auto"
+          >
+            <LogOut className="w-4 h-4" />
+            התנתק
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===== מסך לקוח מאושר (ה"אזור האישי" האמיתי) =====
+function ApprovedView({
+  customer,
+  onLogout,
+}: {
+  customer: Customer;
+  onLogout: () => void;
+}) {
+  const f = customer.formData;
+  const memberSince = customer.approvedAt
+    ? new Date(customer.approvedAt).toLocaleDateString("he-IL")
+    : "—";
+
+  const car = {
+    plate: (f.licensePlate as string) || "—",
+    manufacturer: (f.manufacturer as string) || "—",
+    model: (f.model as string) || "—",
+    year: (f.year as string) || "—",
+    marketValue: (f.marketValue as string) || "—",
+  };
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* Sidebar + Content */}
-      <div className="flex">
-        {/* Desktop collapsible sidebar */}
-        <aside
-          className={`hidden md:flex flex-col ${sidebarWidth} bg-primary min-h-screen fixed right-0 top-0 z-40 transition-all duration-300 shadow-xl`}
-        >
-          {/* Top: home logo + toggle */}
-          <div className="p-4 border-b border-white/10 flex items-center justify-between gap-2">
-            <Link
-              href="/"
-              className="flex items-center gap-3 group"
-              aria-label="חזרה לדף הבית"
-            >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
-                <WheatLogo className="text-white" size={28} />
-              </div>
-              {sidebarOpen && (
-                <span className="text-white font-bold text-sm whitespace-nowrap">
-                  אלומת שיבולים
-                </span>
-              )}
-            </Link>
-            <button
-              type="button"
-              onClick={() => setSidebarOpen((v) => !v)}
-              aria-label={sidebarOpen ? "כווץ תפריט" : "הרחב תפריט"}
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0"
-            >
-              {sidebarOpen ? (
-                <ChevronRight className="w-4 h-4" />
-              ) : (
-                <Menu className="w-4 h-4" />
-              )}
-            </button>
+      {/* Top bar */}
+      <header className="bg-white border-b border-wheat-dark/20 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <WheatLogo className="w-9 h-9 text-gold" />
+            <span className="font-black text-primary hidden sm:inline">
+              אלומת שיבולים
+            </span>
+          </Link>
+          <button
+            onClick={onLogout}
+            className="flex items-center gap-2 text-primary/60 hover:text-danger transition-colors text-sm font-bold"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden md:inline">התנתק</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="max-w-6xl mx-auto p-4 md:p-6">
+        {/* Welcome */}
+        <div className="bg-gradient-to-br from-gold to-gold-dark rounded-3xl p-6 md:p-8 mb-6 text-white relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-5 h-5" />
+              <span className="font-bold text-sm opacity-95">ברוך הבא</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-black mb-2">
+              שלום, {customer.fullName.split(" ")[0]}
+            </h1>
+            <p className="opacity-90 text-sm md:text-base">
+              אתה חלק מקהילת אלומת שיבולים מאז {memberSince}
+            </p>
           </div>
+          <div className="absolute -left-4 -bottom-6 opacity-10">
+            <WheatLogo className="w-40 h-40" />
+          </div>
+        </div>
 
-          <nav className="flex-1 p-3 space-y-1">
-            <Link
-              href="/"
-              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-colors ${
-                !sidebarOpen ? "justify-center" : ""
-              }`}
-              title="דף הבית"
-            >
-              <HomeIcon className="w-5 h-5 shrink-0" />
-              {sidebarOpen && <span className="font-medium">דף הבית</span>}
-            </Link>
+        {/* Status cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <StatusCard
+            icon={<CheckCircle className="w-6 h-6" />}
+            label="סטטוס חברות"
+            value="פעיל"
+            color="green"
+          />
+          <StatusCard
+            icon={<Shield className="w-6 h-6" />}
+            label="ניקוד מועמד"
+            value={customer.score !== undefined ? `${customer.score}/100` : "—"}
+            color="gold"
+          />
+          <StatusCard
+            icon={<Calendar className="w-6 h-6" />}
+            label="חבר מאז"
+            value={memberSince}
+            color="blue"
+          />
+        </div>
 
-            <div className="h-px bg-white/10 my-2" />
-
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                title={tab.label}
-                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-right transition-colors ${
-                  !sidebarOpen ? "justify-center" : ""
-                } ${
-                  activeTab === tab.id
-                    ? "bg-white/10 text-gold"
-                    : "text-white/50 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <tab.icon className="w-5 h-5 shrink-0" />
-                {sidebarOpen && <span className="font-medium">{tab.label}</span>}
-              </button>
-            ))}
-
-            <Link
-              href="/claims/new"
-              title="דיווח אירוע"
-              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gold/20 text-gold hover:bg-gold/30 transition-colors mt-4 ${
-                !sidebarOpen ? "justify-center" : ""
-              }`}
-            >
-              <Plus className="w-5 h-5 shrink-0" />
-              {sidebarOpen && <span className="font-bold">דיווח אירוע</span>}
-            </Link>
-          </nav>
-
-          <div className="p-3 border-t border-white/10">
-            <div
-              className={`flex items-center gap-3 px-2 py-2 ${
-                !sidebarOpen ? "justify-center" : ""
-              }`}
-            >
-              <div className="w-9 h-9 rounded-full bg-gold/30 flex items-center justify-center shrink-0">
-                <User className="w-4 h-4 text-gold" />
+        {/* Info grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Personal */}
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-primary" />
               </div>
-              {sidebarOpen && (
-                <div className="min-w-0">
-                  <p className="text-white text-sm font-medium truncate">
-                    {memberData.name}
-                  </p>
-                  <p className="text-white/30 text-xs truncate">
-                    חבר מ{memberData.memberSince}
-                  </p>
-                </div>
+              <h2 className="font-black text-primary text-lg">פרטים אישיים</h2>
+            </div>
+            <div className="space-y-3">
+              <InfoRow
+                icon={<User className="w-4 h-4" />}
+                label="שם מלא"
+                value={customer.fullName}
+              />
+              <InfoRow
+                icon={<Mail className="w-4 h-4" />}
+                label='דוא"ל'
+                value={customer.email}
+                ltr
+              />
+              {customer.phone && (
+                <InfoRow
+                  icon={<Phone className="w-4 h-4" />}
+                  label="טלפון"
+                  value={customer.phone}
+                  ltr
+                />
+              )}
+              {Boolean(f.city) && (
+                <InfoRow
+                  icon={<MapPin className="w-4 h-4" />}
+                  label="עיר"
+                  value={String(f.city)}
+                />
+              )}
+              {Boolean(f.street) && (
+                <InfoRow
+                  icon={<MapPin className="w-4 h-4" />}
+                  label="כתובת"
+                  value={String(f.street)}
+                />
               )}
             </div>
           </div>
-        </aside>
 
-        {/* Mobile top bar */}
-        <div className="md:hidden fixed top-0 right-0 left-0 bg-primary z-40 px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" aria-label="דף הבית">
-            <WheatLogo className="text-gold" size={26} />
-            <span className="text-white font-bold text-sm">אלומת שיבולים</span>
-          </Link>
-          <button
-            type="button"
-            onClick={() => setSidebarOpen((v) => !v)}
-            aria-label="תפריט"
-            className="p-2 rounded-lg bg-white/10 text-white"
-          >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Car */}
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-gold/10 flex items-center justify-center">
+                <Car className="w-5 h-5 text-gold" />
+              </div>
+              <h2 className="font-black text-primary text-lg">פרטי הרכב</h2>
+            </div>
+            <div className="space-y-3">
+              <InfoRow
+                icon={<FileText className="w-4 h-4" />}
+                label="מספר רישוי"
+                value={car.plate}
+                ltr
+              />
+              <InfoRow
+                icon={<Car className="w-4 h-4" />}
+                label="יצרן ודגם"
+                value={`${car.manufacturer} ${car.model}`}
+              />
+              <InfoRow
+                icon={<Calendar className="w-4 h-4" />}
+                label="שנת ייצור"
+                value={car.year}
+              />
+              <InfoRow
+                icon={<Sparkles className="w-4 h-4" />}
+                label="שווי שוק"
+                value={car.marketValue !== "—" ? `₪${car.marketValue}` : "—"}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Mobile drawer */}
-        {sidebarOpen && (
-          <div
-            className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <aside
-              dir="rtl"
-              className="absolute right-0 top-0 bottom-0 w-72 bg-primary shadow-2xl p-5 overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <Link
-                  href="/"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-2"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center">
-                    <WheatLogo className="text-white" size={24} />
-                  </div>
-                  <span className="text-white font-bold text-sm">אלומת שיבולים</span>
-                </Link>
-                <button
-                  type="button"
-                  aria-label="סגור"
-                  onClick={() => setSidebarOpen(false)}
-                  className="p-2 rounded-lg bg-white/10 text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <Link
-                href="/"
-                onClick={() => setSidebarOpen(false)}
-                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white/60 hover:bg-white/5"
-              >
-                <HomeIcon className="w-5 h-5" />
-                <span>דף הבית</span>
-              </Link>
-              <div className="h-px bg-white/10 my-2" />
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-right ${
-                    activeTab === tab.id
-                      ? "bg-white/10 text-gold"
-                      : "text-white/60 hover:bg-white/5"
-                  }`}
-                >
-                  <tab.icon className="w-5 h-5" />
-                  <span className="font-medium">{tab.label}</span>
-                </button>
-              ))}
-              <Link
-                href="/claims/new"
-                onClick={() => setSidebarOpen(false)}
-                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gold/20 text-gold mt-4"
-              >
-                <Plus className="w-5 h-5" />
-                <span className="font-bold">דיווח אירוע</span>
-              </Link>
-            </aside>
+        {/* Coming soon banner */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 text-center">
+          <div className="w-14 h-14 rounded-full bg-wheat-light flex items-center justify-center mx-auto mb-3">
+            <Sparkles className="w-7 h-7 text-gold" />
           </div>
-        )}
-
-        {/* Main Content */}
-        <main
-          className={`flex-1 pt-16 md:pt-0 transition-all duration-300 ${
-            sidebarOpen ? "md:mr-64" : "md:mr-20"
-          }`}
-        >
-          <div className="p-6 md:p-10">
-            {/* Overview */}
-            {activeTab === "overview" && (
-              <div>
-                <h1 className="text-3xl font-black text-primary mb-2">
-                  שלום, {memberData.name}!
-                </h1>
-                <p className="text-primary/40 mb-8">
-                  הנה סיכום החשבון שלכם באלומת שיבולים
-                </p>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <StatCard
-                    icon={TrendingDown}
-                    label="חיסכון כולל"
-                    value={`₪${memberData.totalSaved.toLocaleString()}`}
-                    color="text-green"
-                    bgColor="bg-green/10"
-                  />
-                  <StatCard
-                    icon={CreditCard}
-                    label="עלות חודש נוכחי"
-                    value="₪48.50"
-                    color="text-gold-dark"
-                    bgColor="bg-gold/10"
-                  />
-                  <StatCard
-                    icon={Shield}
-                    label="ציון חבר"
-                    value={`${memberData.score}/100`}
-                    color="text-primary"
-                    bgColor="bg-primary/10"
-                  />
-                  <StatCard
-                    icon={Users}
-                    label="חברי קהילה"
-                    value="2,418"
-                    color="text-primary-light"
-                    bgColor="bg-primary/5"
-                  />
-                </div>
-
-                {/* Vehicle Card */}
-                <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6 mb-8">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Car className="w-6 h-6 text-gold-dark" />
-                    <h2 className="text-xl font-bold text-primary">הרכב שלי</h2>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                      <p className="text-xs text-primary/30">מספר רישוי</p>
-                      <p className="font-bold text-primary">{memberData.vehicle.plate}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-primary/30">רכב</p>
-                      <p className="font-bold text-primary">{memberData.vehicle.make}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-primary/30">שנה</p>
-                      <p className="font-bold text-primary">{memberData.vehicle.year}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-primary/30">שווי שוק</p>
-                      <p className="font-bold text-primary">
-                        ₪{memberData.vehicle.value.toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Recent Activity */}
-                <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6">
-                  <h2 className="text-xl font-bold text-primary mb-4">
-                    פעילות אחרונה
-                  </h2>
-                  <div className="space-y-3">
-                    {payments.slice(0, 3).map((p, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between py-3 border-b border-wheat-dark/10 last:border-0"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              p.type === "fee" ? "bg-primary/10" : "bg-gold/10"
-                            }`}
-                          >
-                            {p.type === "fee" ? (
-                              <CreditCard className="w-4 h-4 text-primary" />
-                            ) : (
-                              <Banknote className="w-4 h-4 text-gold-dark" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-medium text-primary text-sm">{p.desc}</p>
-                            <p className="text-xs text-primary/30">{p.date}</p>
-                          </div>
-                        </div>
-                        <span className="font-bold text-primary">₪{p.amount}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Payments Tab */}
-            {activeTab === "payments" && (
-              <div>
-                <h1 className="text-3xl font-black text-primary mb-2">תשלומים</h1>
-                <p className="text-primary/40 mb-8">
-                  היסטוריית התשלומים שלכם - דמי ניהול + השתתפות באירועים
-                </p>
-
-                <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6 mb-6">
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <p className="text-xs text-primary/30">דמי ניהול חודשי</p>
-                      <p className="text-2xl font-black text-primary">₪30</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-primary/30">ממוצע השתתפות</p>
-                      <p className="text-2xl font-black text-gold-dark">₪37</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-primary/30">תקרה חודשית</p>
-                      <p className="text-2xl font-black text-green">₪150</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 overflow-hidden">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-wheat-light">
-                        <th className="text-right px-6 py-3 text-sm font-bold text-primary/50">תאריך</th>
-                        <th className="text-right px-6 py-3 text-sm font-bold text-primary/50">תיאור</th>
-                        <th className="text-right px-6 py-3 text-sm font-bold text-primary/50">סכום</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {payments.map((p, i) => (
-                        <tr key={i} className="border-b border-wheat-dark/10">
-                          <td className="px-6 py-4 text-sm text-primary/50">{p.date}</td>
-                          <td className="px-6 py-4 text-sm font-medium text-primary">{p.desc}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-primary">₪{p.amount}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Claims Tab */}
-            {activeTab === "claims" && (
-              <div>
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h1 className="text-3xl font-black text-primary">אירועים</h1>
-                    <p className="text-primary/40">אירועי קהילה והשתתפותכם</p>
-                  </div>
-                  <Link
-                    href="/claims/new"
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-l from-gold to-gold-dark text-white rounded-xl font-bold shadow-lg"
-                  >
-                    <Plus className="w-5 h-5" />
-                    דיווח אירוע
-                  </Link>
-                </div>
-
-                <div className="space-y-4">
-                  {claims.map((c) => (
-                    <div
-                      key={c.id}
-                      className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-6"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="font-bold text-primary">{c.id}</span>
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                c.status === "approved"
-                                  ? "bg-green/10 text-green"
-                                  : c.status === "pending"
-                                  ? "bg-gold/10 text-gold-dark"
-                                  : "bg-red-50 text-danger"
-                              }`}
-                            >
-                              {c.status === "approved" ? "אושר" : c.status === "pending" ? "בטיפול" : "נדחה"}
-                            </span>
-                          </div>
-                          <p className="text-primary/60">{c.desc}</p>
-                          <p className="text-sm text-primary/30 mt-1">
-                            חבר: {c.member} | תאריך: {c.date}
-                          </p>
-                        </div>
-                        <div className="text-left">
-                          <p className="text-xs text-primary/30">סכום כולל</p>
-                          <p className="text-xl font-bold text-primary">
-                            ₪{c.amount.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Profile Tab */}
-            {activeTab === "profile" && (
-              <div>
-                <h1 className="text-3xl font-black text-primary mb-8">פרופיל</h1>
-
-                <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-8">
-                  <div className="flex items-center gap-4 mb-8 pb-6 border-b border-wheat-dark/10">
-                    <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center">
-                      <User className="w-8 h-8 text-gold-dark" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-primary">{memberData.name}</h2>
-                      <p className="text-primary/40">חבר מ{memberData.memberSince}</p>
-                    </div>
-                    <div className="mr-auto bg-green/10 px-4 py-2 rounded-xl">
-                      <p className="text-xs text-green/60">ציון חבר</p>
-                      <p className="text-xl font-black text-green">{memberData.score}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <ProfileField label="שם מלא" value={memberData.name} />
-                    <ProfileField label="רכב" value={`${memberData.vehicle.make} ${memberData.vehicle.year}`} />
-                    <ProfileField label="מספר רישוי" value={memberData.vehicle.plate} />
-                    <ProfileField label="שווי רכב" value={`₪${memberData.vehicle.value.toLocaleString()}`} />
-                    <ProfileField label="דמי ניהול חודשי" value="₪30" />
-                    <ProfileField label="תקרה חודשית" value="₪150" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </main>
+          <h3 className="font-black text-primary text-lg mb-2">
+            פיצ׳רים נוספים בדרך
+          </h3>
+          <p className="text-primary/60 text-sm max-w-lg mx-auto leading-relaxed">
+            בקרוב כאן: ניהול תשלומים, מעקב אירועי קהילה, היסטוריית תביעות,
+            והגדרות חשבון מתקדמות.
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
-function StatCard({
-  icon: Icon,
+function StatusCard({
+  icon,
   label,
   value,
   color,
-  bgColor,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ReactNode;
   label: string;
   value: string;
-  color: string;
-  bgColor: string;
+  color: "green" | "gold" | "blue";
 }) {
+  const styles: Record<string, { bg: string; text: string }> = {
+    green: { bg: "bg-green/10", text: "text-green" },
+    gold: { bg: "bg-gold/10", text: "text-gold" },
+    blue: { bg: "bg-primary/10", text: "text-primary" },
+  };
+  const s = styles[color];
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-wheat-dark/10 p-5">
-      <div className={`w-10 h-10 rounded-xl ${bgColor} flex items-center justify-center mb-3`}>
-        <Icon className={`w-5 h-5 ${color}`} />
+    <div className="bg-white rounded-2xl shadow-sm p-5">
+      <div className={`w-11 h-11 rounded-xl ${s.bg} ${s.text} flex items-center justify-center mb-3`}>
+        {icon}
       </div>
-      <p className="text-xs text-primary/30">{label}</p>
-      <p className={`text-2xl font-black ${color}`}>{value}</p>
+      <div className="text-primary/60 text-sm mb-1">{label}</div>
+      <div className="font-black text-primary text-xl">{value}</div>
     </div>
   );
 }
 
-function ProfileField({ label, value }: { label: string; value: string }) {
+function InfoRow({
+  icon,
+  label,
+  value,
+  ltr,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  ltr?: boolean;
+}) {
   return (
-    <div className="bg-wheat-light rounded-xl px-4 py-3">
-      <p className="text-xs text-primary/30">{label}</p>
-      <p className="font-bold text-primary">{value}</p>
+    <div className="flex items-start gap-3">
+      <div className="w-8 h-8 rounded-lg bg-wheat-light flex items-center justify-center text-primary/50 flex-shrink-0 mt-0.5">
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="text-xs text-primary/50 mb-0.5">{label}</div>
+        <div
+          className="text-primary font-bold text-sm break-words"
+          dir={ltr ? "ltr" : undefined}
+          style={ltr ? { textAlign: "right" } : undefined}
+        >
+          {value}
+        </div>
+      </div>
     </div>
   );
 }

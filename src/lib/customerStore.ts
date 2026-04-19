@@ -1,14 +1,9 @@
 /**
- * מאגר לקוחות זמני מבוסס קובץ JSON.
- * מתאים לשלב פיתוח/ביקורת בלבד. בפרודקשן יש להחליף במסד נתונים (Supabase/Postgres).
- *
- * הערה חשובה: על Vercel מערכת הקבצים היא read-only (למעט /tmp).
- * כל עוד רצים ב-localhost או על שרת רגיל - זה עובד.
+ * מאגר לקוחות מבוסס Supabase.
+ * גישה דרך service_role key מהשרת בלבד - ראה src/lib/supabase.ts
  */
 
-import fs from "fs/promises";
-import path from "path";
-import crypto from "crypto";
+import { supabase } from "./supabase";
 
 export type CustomerStatus = "pending" | "approved" | "rejected";
 
@@ -20,7 +15,7 @@ export type Customer = {
   status: CustomerStatus;
   passwordHash?: string;
   passwordSalt?: string;
-  createdAt: number;
+  createdAt: number; // ms since epoch
   approvedAt?: number;
   rejectedAt?: number;
   rejectionReason?: string;
@@ -28,64 +23,104 @@ export type Customer = {
   formData: Record<string, unknown>;
 };
 
-const DATA_FILE = path.join(process.cwd(), "data", "customers.json");
+// מבנה שורה במסד - שמות snake_case כמו ב-SQL
+type DbRow = {
+  id: string;
+  email: string;
+  full_name: string;
+  phone: string | null;
+  status: CustomerStatus;
+  password_hash: string | null;
+  password_salt: string | null;
+  score: number | null;
+  form_data: Record<string, unknown>;
+  rejection_reason: string | null;
+  created_at: string;
+  approved_at: string | null;
+  rejected_at: string | null;
+};
 
-// קאש גלובלי - שורד HMR של Next.js dev
-const globalKey = "__alumat_customer_store__" as const;
-declare global {
-  // eslint-disable-next-line no-var
-  var __alumat_customer_store__:
-    | { loaded: boolean; data: Customer[] }
-    | undefined;
-}
-const cache = (globalThis[globalKey] ??= { loaded: false, data: [] });
-
-async function ensureDir() {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-}
-
-async function load() {
-  if (cache.loaded) return;
-  try {
-    const txt = await fs.readFile(DATA_FILE, "utf8");
-    cache.data = JSON.parse(txt) as Customer[];
-  } catch {
-    cache.data = [];
-  }
-  cache.loaded = true;
-}
-
-async function save() {
-  await ensureDir();
-  await fs.writeFile(
-    DATA_FILE,
-    JSON.stringify(cache.data, null, 2),
-    "utf8"
-  );
-}
-
-function normalizeEmail(email: string) {
+function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
+function rowToCustomer(r: DbRow): Customer {
+  return {
+    id: r.id,
+    email: r.email,
+    fullName: r.full_name,
+    phone: r.phone ?? undefined,
+    status: r.status,
+    passwordHash: r.password_hash ?? undefined,
+    passwordSalt: r.password_salt ?? undefined,
+    score: r.score ?? undefined,
+    formData: r.form_data ?? {},
+    rejectionReason: r.rejection_reason ?? undefined,
+    createdAt: new Date(r.created_at).getTime(),
+    approvedAt: r.approved_at ? new Date(r.approved_at).getTime() : undefined,
+    rejectedAt: r.rejected_at ? new Date(r.rejected_at).getTime() : undefined,
+  };
+}
+
+// המרה מעדכון Customer חלקי לעדכון DB חלקי
+function updatesToDb(u: Partial<Customer>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  if (u.email !== undefined) out.email = u.email;
+  if (u.fullName !== undefined) out.full_name = u.fullName;
+  if (u.phone !== undefined) out.phone = u.phone;
+  if (u.status !== undefined) out.status = u.status;
+  if (u.passwordHash !== undefined) out.password_hash = u.passwordHash;
+  if (u.passwordSalt !== undefined) out.password_salt = u.passwordSalt;
+  if (u.score !== undefined) out.score = u.score;
+  if (u.formData !== undefined) out.form_data = u.formData;
+  if (u.rejectionReason !== undefined) out.rejection_reason = u.rejectionReason;
+  if (u.approvedAt !== undefined)
+    out.approved_at = new Date(u.approvedAt).toISOString();
+  if (u.rejectedAt !== undefined)
+    out.rejected_at = new Date(u.rejectedAt).toISOString();
+  return out;
+}
+
 export async function listCustomers(): Promise<Customer[]> {
-  await load();
-  return [...cache.data].sort((a, b) => b.createdAt - a.createdAt);
+  const { data, error } = await supabase()
+    .from("customers")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.error("[customerStore.list] error:", error);
+    throw new Error(error.message);
+  }
+  return (data as DbRow[]).map(rowToCustomer);
 }
 
 export async function getCustomerById(
   id: string
 ): Promise<Customer | undefined> {
-  await load();
-  return cache.data.find((c) => c.id === id);
+  const { data, error } = await supabase()
+    .from("customers")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) {
+    console.error("[customerStore.getById] error:", error);
+    throw new Error(error.message);
+  }
+  return data ? rowToCustomer(data as DbRow) : undefined;
 }
 
 export async function getCustomerByEmail(
   email: string
 ): Promise<Customer | undefined> {
-  await load();
-  const n = normalizeEmail(email);
-  return cache.data.find((c) => c.email === n);
+  const { data, error } = await supabase()
+    .from("customers")
+    .select("*")
+    .eq("email", normalizeEmail(email))
+    .maybeSingle();
+  if (error) {
+    console.error("[customerStore.getByEmail] error:", error);
+    throw new Error(error.message);
+  }
+  return data ? rowToCustomer(data as DbRow) : undefined;
 }
 
 export async function createOrUpdateCustomer(input: {
@@ -95,55 +130,81 @@ export async function createOrUpdateCustomer(input: {
   formData: Record<string, unknown>;
   score?: number;
 }): Promise<Customer> {
-  await load();
   const email = normalizeEmail(input.email);
-  const existing = cache.data.find((c) => c.email === email);
+  const existing = await getCustomerByEmail(email);
 
+  // אם המשתמש כבר קיים ועוד ב-pending - נעדכן רק את הנתונים (הגשה חוזרת).
+  // אם כבר אושר/נדחה - לא משנים.
   if (existing) {
-    // רק אם המשתמש עדיין "pending" - נעדכן את הנתונים (הגשה חוזרת).
-    // אם כבר אושר/נדחה - משאירים (לא דורסים).
     if (existing.status === "pending") {
-      existing.fullName = input.fullName;
-      existing.phone = input.phone;
-      existing.formData = input.formData;
-      if (input.score !== undefined) existing.score = input.score;
-      await save();
+      const { data, error } = await supabase()
+        .from("customers")
+        .update({
+          full_name: input.fullName,
+          phone: input.phone ?? null,
+          form_data: input.formData,
+          score: input.score ?? null,
+        })
+        .eq("id", existing.id)
+        .select("*")
+        .single();
+      if (error) {
+        console.error("[customerStore.update existing] error:", error);
+        throw new Error(error.message);
+      }
+      return rowToCustomer(data as DbRow);
     }
     return existing;
   }
 
-  const c: Customer = {
-    id: crypto.randomUUID(),
-    email,
-    fullName: input.fullName,
-    phone: input.phone,
-    status: "pending",
-    createdAt: Date.now(),
-    formData: input.formData,
-    score: input.score,
-  };
-  cache.data.push(c);
-  await save();
-  return c;
+  const { data, error } = await supabase()
+    .from("customers")
+    .insert({
+      email,
+      full_name: input.fullName,
+      phone: input.phone ?? null,
+      status: "pending",
+      form_data: input.formData,
+      score: input.score ?? null,
+    })
+    .select("*")
+    .single();
+  if (error) {
+    console.error("[customerStore.create] error:", error);
+    throw new Error(error.message);
+  }
+  return rowToCustomer(data as DbRow);
 }
 
 export async function updateCustomer(
   id: string,
   updates: Partial<Customer>
 ): Promise<Customer | null> {
-  await load();
-  const i = cache.data.findIndex((c) => c.id === id);
-  if (i === -1) return null;
-  cache.data[i] = { ...cache.data[i], ...updates };
-  await save();
-  return cache.data[i];
+  const dbUpdates = updatesToDb(updates);
+  if (Object.keys(dbUpdates).length === 0) {
+    return (await getCustomerById(id)) ?? null;
+  }
+  const { data, error } = await supabase()
+    .from("customers")
+    .update(dbUpdates)
+    .eq("id", id)
+    .select("*")
+    .maybeSingle();
+  if (error) {
+    console.error("[customerStore.update] error:", error);
+    throw new Error(error.message);
+  }
+  return data ? rowToCustomer(data as DbRow) : null;
 }
 
 export async function deleteCustomer(id: string): Promise<boolean> {
-  await load();
-  const before = cache.data.length;
-  cache.data = cache.data.filter((c) => c.id !== id);
-  if (cache.data.length === before) return false;
-  await save();
-  return true;
+  const { error, count } = await supabase()
+    .from("customers")
+    .delete({ count: "exact" })
+    .eq("id", id);
+  if (error) {
+    console.error("[customerStore.delete] error:", error);
+    throw new Error(error.message);
+  }
+  return (count ?? 0) > 0;
 }
